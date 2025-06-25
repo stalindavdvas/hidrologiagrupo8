@@ -1,0 +1,549 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Dashboard Section -->
+<div class="content-section" id="dashboard-section">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="mb-4"><i class="fas fa-tachometer-alt text-primary"></i> Dashboard Principal</h2>
+        </div>
+    </div>
+    
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="stat-card">
+                <div class="stat-icon text-primary">
+                    <i class="fas fa-database"></i>
+                </div>
+                <div class="stat-number text-primary" id="total-registros">0</div>
+                <div class="stat-label">Total Registros</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="stat-card">
+                <div class="stat-icon text-success">
+                    <i class="fas fa-broadcast-tower"></i>
+                </div>
+                <div class="stat-number text-success" id="sensores-activos">0</div>
+                <div class="stat-label">Sensores Activos</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="stat-card">
+                <div class="stat-icon text-info">
+                    <i class="fas fa-river"></i>
+                </div>
+                <div class="stat-number text-info">1</div>
+                <div class="stat-label">Ríos Monitoreados</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="stat-card">
+                <div class="stat-icon text-warning">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stat-number text-warning">3</div>
+                <div class="stat-label">Tipos de Medición</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Map and Charts Row -->
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-map-marked-alt"></i> Mapa del Río Quijos</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div id="map" class="map-container"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-chart-pie"></i> Resumen de Datos</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="summaryChart" width="400" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Precipitación Section -->
+<div class="content-section" id="precipitacion-section" style="display: none;">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="mb-4"><i class="fas fa-cloud-rain text-primary"></i> Datos de Precipitación</h2>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Precipitación por Sensor (mm)</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="precipitacionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Caudal Section -->
+<div class="content-section" id="caudal-section" style="display: none;">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="mb-4"><i class="fas fa-tint text-primary"></i> Datos de Caudal</h2>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Caudal por Sensor (m³/s)</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="caudalChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Nivel Section -->
+<div class="content-section" id="nivel-section" style="display: none;">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="mb-4"><i class="fas fa-chart-line text-primary"></i> Datos de Nivel</h2>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Nivel por Sensor (m)</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="nivelChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mapa Section -->
+<div class="content-section" id="mapa-section" style="display: none;">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="mb-4"><i class="fas fa-map-marked-alt text-primary"></i> Mapa Detallado</h2>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Río Quijos - Vista Detallada</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div id="detailedMap" class="map-container" style="height: 600px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let map, detailedMap;
+let precipitacionChart, caudalChart, nivelChart, summaryChart;
+
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    initializeMap();
+    initializeDetailedMap();
+    loadStats();
+    loadCharts();
+});
+
+// Initialize main map
+function initializeMap() {
+    map = L.map('map').setView([-0.562767, -78.182822], 11);
+    
+    // Add terrain layer
+    L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenTopoMap contributors',
+        maxZoom: 17
+    }).addTo(map);
+    
+    // Load river coordinates
+    fetch('/api/rio-coords')
+        .then(response => response.json())
+        .then(data => {
+            if (data.rio_quijos) {
+                // Add river path
+                const riverPath = L.polyline(data.rio_quijos, {
+                    color: '#3498db',
+                    weight: 4,
+                    opacity: 0.8
+                }).addTo(map);
+                
+                // Add markers for start and end points
+                L.marker(data.rio_quijos[0])
+                    .bindPopup('<b>Inicio Río Quijos</b><br>Coordenadas: ' + data.rio_quijos[0].join(', '))
+                    .addTo(map);
+                
+                L.marker(data.rio_quijos[data.rio_quijos.length - 1])
+                    .bindPopup('<b>Fin del Tramo</b><br>Coordenadas: ' + data.rio_quijos[data.rio_quijos.length - 1].join(', '))
+                    .addTo(map);
+                
+                // Adjust map view to fit the river
+                map.fitBounds(riverPath.getBounds(), {padding: [20, 20]});
+            }
+        })
+        .catch(error => console.error('Error loading river coordinates:', error));
+}
+
+// Initialize detailed map
+function initializeDetailedMap() {
+    detailedMap = L.map('detailedMap').setView([-0.562767, -78.182822], 12);
+    
+    // Add satellite layer
+    L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenTopoMap contributors',
+        maxZoom: 17
+    }).addTo(detailedMap);
+    
+    // Load river coordinates for detailed map
+    fetch('/api/rio-coords')
+        .then(response => response.json())
+        .then(data => {
+            if (data.rio_quijos) {
+                const riverPath = L.polyline(data.rio_quijos, {
+                    color: '#e74c3c',
+                    weight: 5,
+                    opacity: 0.9
+                }).addTo(detailedMap);
+                
+                // Add numbered markers for each point
+                data.rio_quijos.forEach((coord, index) => {
+                    L.circleMarker(coord, {
+                        color: '#2c3e50',
+                        fillColor: '#3498db',
+                        fillOpacity: 0.7,
+                        radius: 5
+                    })
+                    .bindPopup(`<b>Punto ${index + 1}</b><br>Lat: ${coord[0]}<br>Lng: ${coord[1]}`)
+                    .addTo(detailedMap);
+                });
+                
+                detailedMap.fitBounds(riverPath.getBounds(), {padding: [30, 30]});
+            }
+        })
+        .catch(error => console.error('Error loading detailed river coordinates:', error));
+}
+
+// Load statistics
+function loadStats() {
+    fetch('/api/stats')
+        .then(response => response.json())
+        .then(data => {
+            if (data.total_registros) {
+                const totalRegistros = Object.values(data.total_registros).reduce((a, b) => a + b, 0);
+                document.getElementById('total-registros').textContent = totalRegistros;
+                
+                const totalSensores = Object.values(data.sensores_activos).reduce((a, b) => a + b, 0);
+                document.getElementById('sensores-activos').textContent = totalSensores;
+            }
+        })
+        .catch(error => console.error('Error loading stats:', error));
+}
+
+// Load all charts
+function loadCharts() {
+    loadPrecipitacionChart();
+    loadCaudalChart();
+    loadNivelChart();
+    loadSummaryChart();
+}
+
+// Load precipitación chart
+function loadPrecipitacionChart() {
+    fetch('/api/precipitacion')
+        .then(response => response.json())
+        .then(data => {
+            const ctx = document.getElementById('precipitacionChart').getContext('2d');
+
+            if (precipitacionChart) {
+                precipitacionChart.destroy();
+            }
+
+            precipitacionChart = new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Precipitación por Sensor'
+                        },
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Precipitación (mm)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Fecha'
+                            }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    }
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error loading precipitación data:', error);
+            showNoDataMessage('precipitacionChart');
+        });
+}
+
+// Load caudal chart
+function loadCaudalChart() {
+    fetch('/api/caudal')
+        .then(response => response.json())
+        .then(data => {
+            const ctx = document.getElementById('caudalChart').getContext('2d');
+
+            if (caudalChart) {
+                caudalChart.destroy();
+            }
+
+            caudalChart = new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Caudal por Sensor'
+                        },
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Caudal (m³/s)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Fecha'
+                            }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    }
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error loading caudal data:', error);
+            showNoDataMessage('caudalChart');
+        });
+}
+
+// Load nivel chart
+function loadNivelChart() {
+    fetch('/api/nivel')
+        .then(response => response.json())
+        .then(data => {
+            const ctx = document.getElementById('nivelChart').getContext('2d');
+
+            if (nivelChart) {
+                nivelChart.destroy();
+            }
+
+            nivelChart = new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Nivel por Sensor'
+                        },
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Nivel (m)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Fecha'
+                            }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    }
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error loading nivel data:', error);
+            showNoDataMessage('nivelChart');
+        });
+}
+
+// Load summary chart
+function loadSummaryChart() {
+    fetch('/api/stats')
+        .then(response => response.json())
+        .then(data => {
+            const ctx = document.getElementById('summaryChart').getContext('2d');
+
+            if (summaryChart) {
+                summaryChart.destroy();
+            }
+
+            const labels = ['Precipitación', 'Caudal', 'Nivel'];
+            const registros = [
+                data.total_registros?.precipitacion || 0,
+                data.total_registros?.caudal || 0,
+                data.total_registros?.nivel || 0
+            ];
+
+            summaryChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: registros,
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(75, 192, 192, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Distribución de Registros'
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error loading summary data:', error);
+        });
+}
+
+// Show no data message
+function showNoDataMessage(canvasId) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.font = '16px Arial';
+    ctx.fillStyle = '#6c757d';
+    ctx.textAlign = 'center';
+    ctx.fillText('No hay datos disponibles', canvas.width / 2, canvas.height / 2);
+}
+
+// Resize maps when sections change
+function showSection(sectionName) {
+    // Hide all sections
+    document.querySelectorAll('.content-section').forEach(section => {
+        section.style.display = 'none';
+    });
+
+    // Show selected section
+    const targetSection = document.getElementById(sectionName + '-section');
+    if (targetSection) {
+        targetSection.style.display = 'block';
+
+        // Resize maps if needed
+        setTimeout(() => {
+            if (sectionName === 'dashboard' && map) {
+                map.invalidateSize();
+            } else if (sectionName === 'mapa' && detailedMap) {
+                detailedMap.invalidateSize();
+            }
+        }, 100);
+    }
+}
+
+// Refresh data function
+function refreshData() {
+    loadStats();
+    loadCharts();
+}
+
+// Auto refresh every 5 minutes
+setInterval(refreshData, 300000);
+</script>
+{% endblock %}
