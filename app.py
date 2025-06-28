@@ -121,12 +121,41 @@ def api_nivel():
     data = process_data_for_charts(df, 'Nivel (m)')
     return jsonify(data)
 
+def leer_coords_txt(nombre_archivo):
+    """Lee un archivo .txt de coordenadas lat, lon por línea y devuelve una lista de listas [lat, lon]"""
+    coords = []
+    try:
+        with open(nombre_archivo, 'r') as archivo:
+            for linea in archivo:
+                partes = linea.strip().split(',')
+                if len(partes) == 2:
+                    try:
+                        lat = float(partes[0].strip())
+                        lon = float(partes[1].strip())
+                        coords.append([lat, lon])
+                    except ValueError:
+                        print(f"Coordenada inválida en línea: {linea}")
+    except Exception as e:
+        print(f"Error leyendo {nombre_archivo}: {e}")
+    return coords
+
+@app.route('/api/rios')
+def api_rios():
+    """API que devuelve coordenadas de múltiples ríos desde archivos .txt"""
+    rio_quijos = leer_coords_txt('coordquijos.txt')
+    rio_papallacta = leer_coords_txt('coordpapallacta.txt')
+
+    return jsonify({
+        'quijos': rio_quijos,
+        'papallacta': rio_papallacta
+    })
 
 @app.route('/api/rio-coords')
 def api_rio_coords():
-    """API para coordenadas del río"""
+    """Devuelve coordenadas de ambos ríos desde archivos .txt"""
     return jsonify({
-        'rio_quijos': RIO_QUIJOS_COORDS
+        'rio_quijos': leer_coords_txt('coordquijos.txt'),
+        'rio_papallacta': leer_coords_txt('coordpapallacta.txt')
     })
 
 

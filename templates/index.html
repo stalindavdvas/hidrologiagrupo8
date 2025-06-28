@@ -54,7 +54,7 @@
         <div class="col-lg-8">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-map-marked-alt"></i> Mapa del Río Quijos</h5>
+                    <h5 class="mb-0"><i class="fas fa-map-marked-alt"></i> Mapa del Ríos Monitoreados</h5>
                 </div>
                 <div class="card-body p-0">
                     <div id="map" class="map-container"></div>
@@ -194,30 +194,43 @@ function initializeMap() {
     
     // Load river coordinates
     fetch('/api/rio-coords')
-        .then(response => response.json())
-        .then(data => {
-            if (data.rio_quijos) {
-                // Add river path
-                const riverPath = L.polyline(data.rio_quijos, {
-                    color: '#3498db',
-                    weight: 4,
-                    opacity: 0.8
-                }).addTo(map);
-                
-                // Add markers for start and end points
-                L.marker(data.rio_quijos[0])
-                    .bindPopup('<b>Inicio Río Quijos</b><br>Coordenadas: ' + data.rio_quijos[0].join(', '))
-                    .addTo(map);
-                
-                L.marker(data.rio_quijos[data.rio_quijos.length - 1])
-                    .bindPopup('<b>Fin del Tramo</b><br>Coordenadas: ' + data.rio_quijos[data.rio_quijos.length - 1].join(', '))
-                    .addTo(map);
-                
-                // Adjust map view to fit the river
-                map.fitBounds(riverPath.getBounds(), {padding: [20, 20]});
-            }
-        })
-        .catch(error => console.error('Error loading river coordinates:', error));
+    .then(response => response.json())
+    .then(data => {
+        if (data.rio_quijos) {
+            const riverPath = L.polyline(data.rio_quijos, {
+                color: '#3498db',
+                weight: 4,
+                opacity: 0.8
+            }).addTo(map);
+
+            L.marker(data.rio_quijos[0])
+                .bindPopup('<b>Inicio Río Quijos</b><br>' + data.rio_quijos[0].join(', '))
+                .addTo(map);
+
+            L.marker(data.rio_quijos[data.rio_quijos.length - 1])
+                .bindPopup('<b>Fin del Río Quijos</b><br>' + data.rio_quijos[data.rio_quijos.length - 1].join(', '))
+                .addTo(map);
+
+            map.fitBounds(riverPath.getBounds(), {padding: [20, 20]});
+        }
+
+        if (data.rio_papallacta) {
+            const papallactaPath = L.polyline(data.rio_papallacta, {
+                color: '#2ecc71',
+                weight: 4,
+                opacity: 0.8
+            }).addTo(map);
+
+            L.marker(data.rio_papallacta[0])
+                .bindPopup('<b>Inicio Río Papallacta</b><br>' + data.rio_papallacta[0].join(', '))
+                .addTo(map);
+
+            L.marker(data.rio_papallacta[data.rio_papallacta.length - 1])
+                .bindPopup('<b>Fin del Río Papallacta</b><br>' + data.rio_papallacta[data.rio_papallacta.length - 1].join(', '))
+                .addTo(map);
+        }
+    });
+
 }
 
 // Initialize detailed map
@@ -232,31 +245,43 @@ function initializeDetailedMap() {
     
     // Load river coordinates for detailed map
     fetch('/api/rio-coords')
-        .then(response => response.json())
-        .then(data => {
-            if (data.rio_quijos) {
-                const riverPath = L.polyline(data.rio_quijos, {
-                    color: '#e74c3c',
-                    weight: 5,
-                    opacity: 0.9
-                }).addTo(detailedMap);
-                
-                // Add numbered markers for each point
-                data.rio_quijos.forEach((coord, index) => {
-                    L.circleMarker(coord, {
-                        color: '#2c3e50',
-                        fillColor: '#3498db',
-                        fillOpacity: 0.7,
-                        radius: 5
-                    })
-                    .bindPopup(`<b>Punto ${index + 1}</b><br>Lat: ${coord[0]}<br>Lng: ${coord[1]}`)
-                    .addTo(detailedMap);
-                });
-                
-                detailedMap.fitBounds(riverPath.getBounds(), {padding: [30, 30]});
-            }
-        })
-        .catch(error => console.error('Error loading detailed river coordinates:', error));
+    .then(response => response.json())
+    .then(data => {
+        if (data.rio_quijos) {
+            const riverPath = L.polyline(data.rio_quijos, {
+                color: '#3498db',
+                weight: 4,
+                opacity: 0.8
+            }).addTo(detailedMap);
+
+            L.marker(data.rio_quijos[0])
+                .bindPopup('<b>Inicio Río Quijos</b><br>' + data.rio_quijos[0].join(', '))
+                .addTo(detailedMap);
+
+            L.marker(data.rio_quijos[data.rio_quijos.length - 1])
+                .bindPopup('<b>Fin del Río Quijos</b><br>' + data.rio_quijos[data.rio_quijos.length - 1].join(', '))
+                .addTo(detailedMap);
+
+            map.fitBounds(riverPath.getBounds(), {padding: [20, 20]});
+        }
+
+        if (data.rio_papallacta) {
+            const papallactaPath = L.polyline(data.rio_papallacta, {
+                color: '#2ecc71',
+                weight: 4,
+                opacity: 0.8
+            }).addTo(detailedMap);
+
+            L.marker(data.rio_papallacta[0])
+                .bindPopup('<b>Inicio Río Papallacta</b><br>' + data.rio_papallacta[0].join(', '))
+                .addTo(detailedMap);
+
+            L.marker(data.rio_papallacta[data.rio_papallacta.length - 1])
+                .bindPopup('<b>Fin del Río Papallacta</b><br>' + data.rio_papallacta[data.rio_papallacta.length - 1].join(', '))
+                .addTo(detailedMap);
+        }
+    });
+
 }
 
 // Load statistics
