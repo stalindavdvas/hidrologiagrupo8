@@ -94,6 +94,16 @@
                     </div>
                 </div>
             </div>
+            <div class="card mt-4">
+    <div class="card-header">
+        <h5 class="mb-0">Precipitación por Sensor - Papallacta</h5>
+    </div>
+    <div class="card-body">
+        <div class="chart-container">
+            <canvas id="precipitacionPapallactaChart"></canvas>
+        </div>
+    </div>
+</div>
         </div>
     </div>
 </div>
@@ -118,6 +128,17 @@
                     </div>
                 </div>
             </div>
+            <div class="card mt-4">
+    <div class="card-header">
+        <h5 class="mb-0">Caudal por Sensor - Papallacta</h5>
+    </div>
+    <div class="card-body">
+        <div class="chart-container">
+            <canvas id="caudalPapallactaChart"></canvas>
+        </div>
+    </div>
+</div>
+
         </div>
     </div>
 </div>
@@ -142,6 +163,17 @@
                     </div>
                 </div>
             </div>
+            <div class="card mt-4">
+    <div class="card-header">
+        <h5 class="mb-0">Nivel por Sensor - Papallacta</h5>
+    </div>
+    <div class="card-body">
+        <div class="chart-container">
+            <canvas id="nivelPapallactaChart"></canvas>
+        </div>
+    </div>
+</div>
+
         </div>
     </div>
 </div>
@@ -173,6 +205,7 @@
 <script>
 let map, detailedMap;
 let precipitacionChart, caudalChart, nivelChart, summaryChart;
+let precipitacionPapallactaChart, caudalPapallactaChart, nivelPapallactaChart;
 
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', function() {
@@ -303,8 +336,11 @@ function loadStats() {
 // Load all charts
 function loadCharts() {
     loadPrecipitacionChart();
+    loadPrecipitacionPapallactaChart();
     loadCaudalChart();
+    loadCaudalPapallactaChart();
     loadNivelChart();
+    loadNivelPapallactaChart();
     loadSummaryChart();
 }
 
@@ -328,7 +364,7 @@ function loadPrecipitacionChart() {
                     plugins: {
                         title: {
                             display: true,
-                            text: 'Precipitación por Sensor'
+                            text: 'Precipitación por Sensor Quijos'
                         },
                         legend: {
                             position: 'top'
@@ -467,6 +503,102 @@ function loadNivelChart() {
         .catch(error => {
             console.error('Error loading nivel data:', error);
             showNoDataMessage('nivelChart');
+        });
+}
+
+function loadPrecipitacionPapallactaChart() {
+    fetch('/api/precipitacion_papallacta')
+        .then(response => response.json())
+        .then(data => {
+            const ctx = document.getElementById('precipitacionPapallactaChart').getContext('2d');
+
+            if (precipitacionPapallactaChart) {
+                precipitacionPapallactaChart.destroy();
+            }
+
+            precipitacionPapallactaChart = new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Precipitación Papallacta por Sensor'
+                        },
+                        legend: { position: 'top' }
+                    },
+                    interaction: { intersect: false, mode: 'index' },
+                    scales: {
+                        x: { title: { display: true, text: 'Fecha' }},
+                        y: { title: { display: true, text: 'Precipitación (mm)' }, beginAtZero: true }
+                    }
+                }
+            });
+        });
+}
+
+function loadCaudalPapallactaChart() {
+    fetch('/api/caudal_papallacta')
+        .then(response => response.json())
+        .then(data => {
+            const ctx = document.getElementById('caudalPapallactaChart').getContext('2d');
+
+            if (caudalPapallactaChart) {
+                caudalPapallactaChart.destroy();
+            }
+
+            caudalPapallactaChart = new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Caudal Papallacta por Sensor'
+                        },
+                        legend: { position: 'top' }
+                    },
+                    interaction: { intersect: false, mode: 'index' },
+                    scales: {
+                        x: { title: { display: true, text: 'Fecha' }},
+                        y: { title: { display: true, text: 'Caudal (m³/s)' }, beginAtZero: true }
+                    }
+                }
+            });
+        });
+}
+
+function loadNivelPapallactaChart() {
+    fetch('/api/nivel_papallacta')
+        .then(response => response.json())
+        .then(data => {
+            const ctx = document.getElementById('nivelPapallactaChart').getContext('2d');
+
+            if (nivelPapallactaChart) {
+                nivelPapallactaChart.destroy();
+            }
+
+            nivelPapallactaChart = new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Nivel Papallacta por Sensor'
+                        },
+                        legend: { position: 'top' }
+                    },
+                    interaction: { intersect: false, mode: 'index' },
+                    scales: {
+                        x: { title: { display: true, text: 'Fecha' }},
+                        y: { title: { display: true, text: 'Nivel (m)' }, beginAtZero: true }
+                    }
+                }
+            });
         });
 }
 

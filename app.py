@@ -66,7 +66,12 @@ def process_data_for_charts(df, data_type):
             'P43': 'rgba(255, 99, 132, 0.8)',
             'P55': 'rgba(75, 192, 192, 0.8)',
             'H44': 'rgba(153, 102, 255, 0.8)',
-            'H55': 'rgba(255, 159, 64, 0.8)'
+            'H55': 'rgba(255, 159, 64, 0.8)',
+            'P34': 'rgba(54, 162, 235, 0.8)',
+            'P63': 'rgba(255, 99, 132, 0.8)',
+            'M5023': 'rgba(75, 192, 192, 0.8)',
+            'H34': 'rgba(153, 102, 255, 0.8)',
+            'H45': 'rgba(255, 159, 64, 0.8)'
         }
 
         for column in df.columns:
@@ -120,6 +125,28 @@ def api_nivel():
     df = safe_read_csv('nivel.csv')
     data = process_data_for_charts(df, 'Nivel (m)')
     return jsonify(data)
+
+@app.route('/api/precipitacion_papallacta')
+def api_precipitacion_papallacta():
+    df = safe_read_csv('papallactaprecipitacion.csv')
+    data = process_data_for_charts(df, 'Precipitación Papallacta (mm)')
+    return jsonify(data)
+
+@app.route('/api/caudal_papallacta')
+def api_caudal_papallacta():
+    df = safe_read_csv('caudalpapallacta.csv')
+    data = process_data_for_charts(df, 'Caudal Papallacta (m³/s)')
+    return jsonify(data)
+
+@app.route('/api/nivel_papallacta')
+def api_nivel_papallacta():
+    df = safe_read_csv('nivelpapallacta.csv')
+    data = process_data_for_charts(df, 'Nivel Papallacta (m)')
+    return jsonify(data)
+
+
+
+
 
 def leer_coords_txt(nombre_archivo):
     """Lee un archivo .txt de coordenadas lat, lon por línea y devuelve una lista de listas [lat, lon]"""
