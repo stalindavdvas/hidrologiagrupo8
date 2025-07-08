@@ -34,7 +34,7 @@
                 <div class="stat-icon text-info">
                     <i class="fas fa-river"></i>
                 </div>
-                <div class="stat-number text-info">1</div>
+                <div class="stat-number text-info">2</div>
                 <div class="stat-label">Ríos Monitoreados</div>
             </div>
         </div>
@@ -224,6 +224,91 @@ function initializeMap() {
         attribution: '© OpenTopoMap contributors',
         maxZoom: 17
     }).addTo(map);
+
+   const iconoPluvio = L.icon({
+    iconUrl: '/static/img/pluvi.png', // Ícono para sensores pluviométricos
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -28]
+});
+
+const iconoHidro = L.icon({
+    iconUrl: '/static/img/hidro.png', // Ícono para sensores hidrométricos
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -28]
+});
+
+    // Coordenadas del sensor
+    const sensores = [
+         {
+        codigo: "P42",
+        nombre: "Antisana Ramón Huañuna",
+        tipo: "Pluviométrica",
+        lat: -0.6022867145410288,
+        lng: -78.1986689291808
+    },
+    {
+        codigo: "P43",
+        nombre: "Antisana Limboasi",
+        tipo: "Pluviométrica",
+        lat: -0.5934839659614135,
+        lng: -78.20825370752031
+    },
+    {
+        codigo: "P55",
+        nombre: "Antisana Diguchi",
+        tipo: "Pluviométrica",
+        lat: -0.5731364867736277,
+        lng: -78.262844542214
+    },
+    {
+        codigo: "P34",
+        nombre: "Papallacta",
+        tipo: "Pluviométrica",
+        lat: -0.3809496476812419,
+        lng: -78.1411372167858
+    },
+    {
+        codigo: "P63",
+        nombre: "La Virgen Papallacta",
+        tipo: "Pluviométrica",
+        lat: -0.32058993015514037,
+        lng: -78.19171352782969
+    },
+    {
+        codigo: "M5023",
+        nombre: "Papallacta",
+        tipo: "Pluviométrica",
+        lat: -0.3784621293075407,
+        lng: -78.14090447228763
+    },
+    {
+        codigo: "H44",
+        nombre: "Antisana DJ Diguchi",
+        tipo: "Hidrométrica",
+        lat: -0.5683880379564397,
+        lng: -78.2298390801277
+    },
+    {
+        codigo: "H55",
+        nombre: "Río Antisana AC",
+        tipo: "Hidrométrica",
+        lat: -0.5367672976823137,
+        lng: -78.22695270391573
+    }
+    ];
+
+     // Añadir marcador con ícono
+    sensores.forEach(sensor => {
+    const icono = sensor.tipo.toLowerCase().includes('hidro') ? iconoHidro : iconoPluvio;
+
+    L.marker([sensor.lat, sensor.lng], { icon: icono })
+        .bindPopup(`<b>${sensor.nombre}</b><br>Código: ${sensor.codigo}<br>Tipo: ${sensor.tipo}`)
+        .addTo(map);
+});
+
+
     
     // Load river coordinates
     fetch('/api/rio-coords')
