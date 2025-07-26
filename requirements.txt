@@ -7,3 +7,5 @@ MarkupSafe
 itsdangerous
 click
 blinker
+google-genai
+python-dotenv

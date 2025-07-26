@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Dashboard Hidrológico - Grupo 8{% endblock %}</title>
-
     <!-- Bootstrap CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -13,7 +12,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" rel="stylesheet">
     <!-- Chart.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -24,14 +22,16 @@
             --dark-color: #1a252f;
             --light-color: #ecf0f1;
             --sidebar-width: 280px;
+            /* Landing Page Colors */
+            --landing-bg: #1a2a3a; /* Fondo oscuro para la landing */
+            --landing-text: #ffffff;
+            --landing-accent: #4da6ff; /* Azul brillante para acentos */
         }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f9fa;
             overflow-x: hidden;
         }
-
         /* Sidebar */
         .sidebar {
             position: fixed;
@@ -45,27 +45,22 @@
             z-index: 1000;
             box-shadow: 2px 0 10px rgba(0,0,0,0.1);
         }
-
         .sidebar.active {
             transform: translateX(0);
         }
-
         .sidebar-header {
             padding: 20px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-
         .sidebar-header h3 {
             color: white;
             margin: 0;
             font-weight: 300;
             font-size: 1.5rem;
         }
-
         .sidebar-menu {
             padding: 20px 0;
         }
-
         .sidebar-menu a {
             display: block;
             padding: 15px 25px;
@@ -74,48 +69,40 @@
             transition: all 0.3s ease;
             border-left: 3px solid transparent;
         }
-
         .sidebar-menu a:hover,
         .sidebar-menu a.active {
             background-color: rgba(255,255,255,0.1);
             color: white;
             border-left-color: var(--secondary-color);
         }
-
         .sidebar-menu i {
             margin-right: 10px;
             width: 20px;
         }
-
         /* Main Content */
         .main-content {
             margin-left: 0;
             transition: margin-left 0.3s ease;
             min-height: 100vh;
         }
-
         .main-content.sidebar-open {
             margin-left: var(--sidebar-width);
         }
-
         /* Navbar */
         .navbar {
             background: white !important;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             padding: 1rem 2rem;
         }
-
         .navbar-brand {
             font-weight: bold;
             color: var(--primary-color) !important;
             font-size: 1.5rem;
         }
-
         .navbar-toggler {
             border: none;
             padding: 0.5rem;
         }
-
         /* Cards */
         .card {
             border: none;
@@ -124,12 +111,10 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             margin-bottom: 2rem;
         }
-
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
         }
-
         .card-header {
             background: linear-gradient(135deg, var(--secondary-color), #5dade2);
             color: white;
@@ -137,11 +122,9 @@
             padding: 1.5rem;
             border: none;
         }
-
         .card-body {
             padding: 2rem;
         }
-
         /* Stats Cards */
         .stat-card {
             background: white;
@@ -152,28 +135,23 @@
             transition: all 0.3s ease;
             margin-bottom: 2rem;
         }
-
         .stat-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
         }
-
         .stat-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
         }
-
         .stat-number {
             font-size: 2.5rem;
             font-weight: bold;
             margin-bottom: 0.5rem;
         }
-
         .stat-label {
             color: #6c757d;
             font-size: 1.1rem;
         }
-
         /* Map Container */
         .map-container {
             height: 500px;
@@ -181,28 +159,23 @@
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-
         /* Chart Container */
         .chart-container {
             height: 400px;
             padding: 1rem;
         }
-
         /* Responsive */
         @media (max-width: 768px) {
             .main-content {
                 margin-left: 0 !important;
             }
-
             .sidebar {
                 width: 100%;
             }
-
             .navbar {
                 padding: 1rem;
             }
         }
-
         /* Loading Spinner */
         .loading {
             display: flex;
@@ -210,7 +183,6 @@
             align-items: center;
             height: 200px;
         }
-
         .spinner {
             width: 40px;
             height: 40px;
@@ -219,12 +191,10 @@
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
-
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
         /* Overlay */
         .overlay {
             position: fixed;
@@ -236,18 +206,231 @@
             z-index: 999;
             display: none;
         }
-
         .overlay.active {
             display: block;
         }
-    </style>
 
+        /* --- Landing Page Specific Styles --- */
+        .landing-page {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), var(--landing-bg);
+            color: var(--landing-text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .landing-page::before {
+             content: "";
+             position: absolute;
+             top: 0; left: 0;
+             right: 0; bottom: 0;
+             background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%231a2a3a"/><path d="M0 0L100 100M100 0L0 100" stroke="%2322354a" stroke-width="0.5"/></svg>');
+             opacity: 0.2;
+             z-index: -1;
+        }
+        .landing-content {
+            max-width: 900px;
+            z-index: 2;
+            animation: fadeInUp 1s ease-out;
+        }
+        .landing-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            animation: pulse 2s infinite;
+        }
+        .landing-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        .btn-landing {
+            background: linear-gradient(to right, var(--secondary-color), var(--landing-accent));
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-landing:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: linear-gradient(to right, #2980b9, #3498db);
+        }
+        .btn-landing:active {
+             transform: translateY(1px);
+        }
+        .btn-landing::after {
+             content: "";
+             position: absolute;
+             top: -50%; left: -60%;
+             width: 20px;
+             height: 200%;
+             background: rgba(255,255,255,0.3);
+             transform: rotate(25deg);
+             transition: all 0.6s;
+        }
+        .btn-landing:hover::after {
+             left: 120%;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes pulse {
+             0% { transform: scale(1); }
+             50% { transform: scale(1.02); }
+             100% { transform: scale(1); }
+        }
+
+        /* Carrusel de Imágenes Mejorado */
+        .custom-carousel {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 2rem auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            height: 450px; /* Altura fija para el carrusel */
+        }
+        .carousel-inner {
+            height: 100%;
+        }
+        .carousel-item {
+            height: 100%;
+            transition: transform 1s ease-in-out; /* Transición suave */
+        }
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Asegura que la imagen cubra el contenedor */
+        }
+        .carousel-caption {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            padding: 15px;
+            backdrop-filter: blur(5px); /* Efecto de desenfoque */
+            animation: fadeIn 0.5s ease-in-out; /* Animación al aparecer */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 10%; /* Hacer los controles más grandes */
+        }
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco para las flechas */
+            border-radius: 50%;
+            padding: 15px;
+            width: 50px;
+            height: 50px;
+            background-size: 60% 60%; /* Ajustar el tamaño del ícono dentro del círculo */
+        }
+        .carousel-indicators [data-bs-target] {
+             background-color: rgba(255, 255, 255, 0.5); /* Color base de los indicadores */
+             width: 12px;
+             height: 12px;
+             border-radius: 50%;
+             border: none;
+             transition: all 0.3s ease;
+        }
+        .carousel-indicators .active {
+             background-color: white; /* Color activo */
+             width: 15px;
+             height: 15px;
+             transform: scale(1.2);
+        }
+
+        /* Cards de Información Mejorados */
+        .info-cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1rem;
+        }
+        .info-card-landing {
+            background: rgba(255, 255, 255, 0.95); /* Fondo blanco semitransparente */
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Transición suave y elástica */
+            border-left: 5px solid var(--landing-accent);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: cardAppear 0.6s forwards;
+        }
+        .info-card-landing:nth-child(1) { animation-delay: 0.1s; }
+        .info-card-landing:nth-child(2) { animation-delay: 0.3s; }
+        .info-card-landing:nth-child(3) { animation-delay: 0.5s; }
+        .info-card-landing:nth-child(4) { animation-delay: 0.7s; }
+        .info-card-landing:nth-child(5) { animation-delay: 0.9s; }
+        .info-card-landing:nth-child(6) { animation-delay: 1.1s; }
+
+        @keyframes cardAppear {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .info-card-landing:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        .info-card-landing h4 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+        .info-card-landing p, .info-card-landing ul {
+            color: #555;
+            line-height: 1.6;
+        }
+        .info-card-landing ul {
+            padding-left: 1.2rem;
+        }
+
+        /* Footer o sección final de la landing */
+        .landing-footer {
+            margin-top: auto;
+            padding: 2rem;
+            width: 100%;
+            text-align: center;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+    </style>
     {% block extra_css %}{% endblock %}
 </head>
 <body>
     <!-- Overlay -->
     <div class="overlay" id="overlay"></div>
-
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-header">
@@ -255,7 +438,11 @@
             <p class="text-light small mb-0">Dashboard Hidrológico</p>
         </div>
         <div class="sidebar-menu">
-            <a href="#dashboard" class="menu-link active" data-section="dashboard">
+             <!-- Enlace a la nueva sección de inicio (landing) -->
+            <a href="#inicio" class="menu-link active" data-section="inicio">
+                <i class="fas fa-home"></i> Inicio
+            </a>
+            <a href="#dashboard" class="menu-link" data-section="dashboard">
                 <i class="fas fa-tachometer-alt"></i> Dashboard
             </a>
             <a href="#precipitacion" class="menu-link" data-section="precipitacion">
@@ -272,7 +459,6 @@
             </a>
         </div>
     </nav>
-
     <!-- Main Content -->
     <div class="main-content" id="mainContent">
         <!-- Navbar -->
@@ -289,74 +475,83 @@
                 </span>
             </div>
         </nav>
-
         <!-- Content -->
-        <div class="container-fluid p-4">
+        <div class="container-fluid p-0"> <!-- Cambiado p-4 a p-0 para la landing -->
             {% block content %}{% endblock %}
         </div>
     </div>
-
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
-
     <script>
         // Sidebar Toggle
         document.getElementById('sidebarToggle').addEventListener('click', function() {
             const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('mainContent');
             const overlay = document.getElementById('overlay');
-
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
-
             if (window.innerWidth > 768) {
                 mainContent.classList.toggle('sidebar-open');
             }
         });
-
         // Close sidebar when clicking overlay
         document.getElementById('overlay').addEventListener('click', function() {
             const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('mainContent');
             const overlay = document.getElementById('overlay');
-
             sidebar.classList.remove('active');
             mainContent.classList.remove('sidebar-open');
             overlay.classList.remove('active');
         });
-
         // Menu navigation
         document.querySelectorAll('.menu-link').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
-
                 // Remove active class from all links
                 document.querySelectorAll('.menu-link').forEach(l => l.classList.remove('active'));
-
                 // Add active class to clicked link
                 this.classList.add('active');
-
                 // Get section to show
                 const section = this.getAttribute('data-section');
                 showSection(section);
             });
         });
-
         function showSection(sectionName) {
             // Hide all sections
             document.querySelectorAll('.content-section').forEach(section => {
                 section.style.display = 'none';
             });
-
             // Show selected section
             const targetSection = document.getElementById(sectionName + '-section');
             if (targetSection) {
                 targetSection.style.display = 'block';
+                 // Si es la sección de inicio (landing), asegurarse de que esté en la parte superior
+                if (sectionName === 'inicio') {
+                     window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
             }
         }
+         // Función para navegar al dashboard desde la landing page
+        function goToDashboard() {
+             // Quitar clase activa del enlace de inicio en el sidebar
+            document.querySelector('.menu-link[data-section="inicio"]').classList.remove('active');
+             // Agregar clase activa al enlace de dashboard en el sidebar
+            const dashboardLink = document.querySelector('.menu-link[data-section="dashboard"]');
+            if (dashboardLink) {
+                dashboardLink.classList.add('active');
+            }
+             // Mostrar la sección del dashboard
+            showSection('dashboard');
+             // Desplazar suavemente al inicio del dashboard
+            setTimeout(() => {
+                 const dashboardSection = document.getElementById('dashboard-section');
+                 if (dashboardSection) {
+                     dashboardSection.scrollIntoView({ behavior: 'smooth' });
+                 }
+            }, 100); // Pequeño retraso para asegurar que la sección se haya mostrado
+        }
     </script>
-
     {% block extra_js %}{% endblock %}
 </body>
 </html>

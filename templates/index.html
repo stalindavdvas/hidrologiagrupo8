@@ -1,14 +1,135 @@
 {% extends "base.html" %}
-
 {% block content %}
+<!-- Landing Page Section (Nueva Pantalla de Inicio Principal) -->
+<div class="content-section" id="inicio-section">
+    <div class="landing-page">
+        <div class="landing-content">
+            <h1 class="landing-title">Dashboard Hidrológico de los datos de Antisana</h1>
+            <p class="landing-subtitle">Análisis de datos de precipitaciones, caudales y niveles de los ríos Quijos y Papallacta que afectan directamente al Rio Coca y la hidroeléctrica que provee energía al pais.</p>
+            
+            <!-- Carrusel de Imágenes de Bootstrap (Estilizado y Corregido) -->
+<div class="row mb-5">
+    <div class="col-12">
+        <!-- Carrusel con ID único y transición fade -->
+        <div id="carouselAntisana" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
+            <!-- Indicadores -->
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselAntisana" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselAntisana" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselAntisana" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+
+            <!-- Contenedor de las diapositivas -->
+            <!-- Altura fija y ocultar overflow para mantener el diseño -->
+            <div class="carousel-inner rounded shadow-lg" style="height: 500px; overflow: hidden;">
+                <!-- Diapositiva 1 - Activa -->
+                <div class="carousel-item active">
+                    <!-- Imagen que cubre el contenedor -->
+                    <img src="../static/img/antisana.jpeg" class="d-block w-100 h-100" style="object-fit: cover;" alt="Volcán Antisana">
+                    <!-- Caption centrado verticalmente -->
+                    <div class="carousel-caption d-flex flex-column justify-content-center h-100 bg-dark bg-opacity-50 rounded-3 p-4" style="top: 0; bottom: 0;">
+                        <div>
+                            <h5 class="display-6 fw-bold">Volcán Antisana</h5>
+                            <p class="lead">Una de las cimas más altas de Ecuador, fuente vital de agua.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Diapositiva 2 -->
+                <div class="carousel-item">
+                    <img src="../static/img/mica.jpg" class="d-block w-100 h-100" style="object-fit: cover;" alt="La Mica">
+                    <div class="carousel-caption d-flex flex-column justify-content-center h-100 bg-dark bg-opacity-50 rounded-3 p-4" style="top: 0; bottom: 0;">
+                        <div>
+                            <h5 class="display-6 fw-bold">La Mica</h5>
+                            <p class="lead">Laguna Ubicada en el pie del volcán Antisana.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Diapositiva 3 -->
+                <div class="carousel-item">
+                    <img src="../static/img/cocacodo.png" class="d-block w-100 h-100" style="object-fit: cover;" alt="Coca Codo Sinclair">
+                    <div class="carousel-caption d-flex flex-column justify-content-center h-100 bg-dark bg-opacity-50 rounded-3 p-4" style="top: 0; bottom: 0;">
+                        <div>
+                            <h5 class="display-6 fw-bold">Hidroeléctrica CocaCodo Sinclair</h5>
+                            <p class="lead">Hidroeléctrica que provee una parte de energía al país</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controles (flechas) -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselAntisana" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselAntisana" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+            <!-- Botón para acceder al Dashboard -->
+            <button class="btn btn-landing mt-4" onclick="goToDashboard()">
+                <i class="fas fa-chart-line me-2"></i> Ver Dashboard y Gráficos
+            </button>
+        </div>
+
+        <!-- Cards de Información con Animación -->
+        <div class="info-cards-container">
+            <div class="info-card-landing">
+                <h4><i class="fas fa-mountain me-2"></i> ¿Qué es el Volcán Antisana?</h4>
+                <p>El Volcán Antisana es un estratovolcán activo ubicado en la Cordillera Oriental de los Andes ecuatorianos. Con una altitud de 5,753 metros sobre el nivel del mar, es una de las montañas más altas del país y alberga importantes glaciares y lagunas. Su complejo ecosistema es crucial para la regulación hídrica de la región.</p>
+            </div>
+            <div class="info-card-landing">
+                <h4><i class="fas fa-tachometer-alt me-2"></i> Mediciones Hidrológicas</h4>
+                <p>Este sistema monitorea tres parámetros clave:</p>
+                <ul>
+                    <li><strong>Precipitación:</strong> Cantidad de agua que cae (lluvia, nieve).</li>
+                    <li><strong>Caudal:</strong> Volumen de agua que fluye por un río por segundo (m³/s).</li>
+                    <li><strong>Nivel:</strong> Altura del agua en un punto específico del río (metros).</li>
+                </ul>
+            </div>
+            <div class="info-card-landing">
+                <h4><i class="fas fa-dam me-2"></i> Represas y Coca Codo Sinclair</h4>
+                <p>Una represa es una barrera construida para almacenar agua de un río, generando energía hidroeléctrica o para uso agrícola. La Represa Coca Codo Sinclair, ubicada en la provincia de Napo, es una de las más grandes de Ecuador. Utiliza el agua de los ríos originados en la vertiente amazónica, incluyendo afluentes del Antisana, para generar electricidad.</p>
+            </div>
+            <div class="info-card-landing">
+                <h4><i class="fas fa-thermometer-half me-2"></i> Sensores: Pluviómetros y Hidrómetros</h4>
+                <p><strong>Pluviómetros:</strong> Instrumentos que miden la cantidad de precipitación caída en un lugar y tiempo determinado.</p>
+                <p><strong>Hidrómetros:</strong> En este contexto, nos referimos a sensores que miden el caudal y/o nivel del agua en los ríos.</p>
+            </div>
+            <div class="info-card-landing">
+                <h4><i class="fas fa-tint me-2"></i> Importancia del Agua del Antisana para Quito</h4>
+                <p>Los glaciares y ecosistemas del Volcán Antisana son una fuente vital de agua dulce. Los ríos que nacen en sus laderas, como el Río Quijos, alimentan los sistemas hídricos que abastecen a la capital ecuatoriana, Quito, garantizando el suministro para millones de habitantes.</p>
+            </div>
+            <div class="info-card-landing">
+                <h4><i class="fas fa-info-circle me-2"></i> ¿Por qué estos Valores?</h4>
+                <p>Las mediciones de precipitación, caudal y nivel son esenciales para:</p>
+                <ul>
+                    <li>Gestionar los recursos hídricos de manera eficiente.</li>
+                    <li>Prevenir y alertar sobre posibles inundaciones o sequías.</li>
+                    <li>Monitorear el impacto del cambio climático en los glaciares.</li>
+                    <li>Garantizar el funcionamiento seguro de infraestructuras hidroeléctricas como Coca Codo Sinclair.</li>
+                </ul>
+                <p>Este dashboard permite visualizar y analizar estos datos críticos.</p>
+            </div>
+        </div>
+
+        <div class="landing-footer">
+            <p>© 2025 Dashboard Hidrológico - Grupo 8</p>
+        </div>
+    </div>
+</div>
+
 <!-- Dashboard Section -->
-<div class="content-section" id="dashboard-section">
+<div class="content-section" id="dashboard-section" style="display: none;">
+    <div class="container-fluid p-4"> <!-- Añadido container y padding para consistencia -->
     <div class="row mb-4">
         <div class="col-12">
             <h2 class="mb-4"><i class="fas fa-tachometer-alt text-primary"></i> Dashboard Principal</h2>
         </div>
     </div>
-    
     <!-- Stats Cards -->
     <div class="row mb-4">
         <div class="col-lg-3 col-md-6">
@@ -48,7 +169,6 @@
             </div>
         </div>
     </div>
-    
     <!-- Map and Charts Row -->
     <div class="row">
         <div class="col-lg-8">
@@ -72,21 +192,24 @@
             </div>
         </div>
     </div>
+    </div> <!-- Cierre de container-fluid -->
 </div>
-
 <!-- Precipitación Section -->
 <div class="content-section" id="precipitacion-section" style="display: none;">
+    <div class="container-fluid p-4">
     <div class="row mb-4">
         <div class="col-12">
             <h2 class="mb-4"><i class="fas fa-cloud-rain text-primary"></i> Datos de Precipitación</h2>
         </div>
     </div>
-    
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0">Precipitación por Sensor (mm)</h5>
+                    <h5 class="mb-0">Precipitación por Sensor Rio Quijos(mm)</h5>
+                    <button class="btn btn-sm btn-outline-primary float-end btn-analizar-ia" data-grafico-id="precipitacionChart" data-seccion="precipitacion">
+    <i class="fas fa-robot"></i> Analizar Gráfico
+</button>
                 </div>
                 <div class="card-body">
                     <div class="chart-container">
@@ -97,6 +220,9 @@
             <div class="card mt-4">
     <div class="card-header">
         <h5 class="mb-0">Precipitación por Sensor - Papallacta</h5>
+        <button class="btn btn-sm btn-outline-primary float-end btn-analizar-ia" data-grafico-id="precipitacionPapallactaChart" data-seccion="precipitacion_papallacta">
+    <i class="fas fa-robot"></i> Analizar Gráfica
+</button>
     </div>
     <div class="card-body">
         <div class="chart-container">
@@ -106,21 +232,24 @@
 </div>
         </div>
     </div>
+    </div>
 </div>
-
 <!-- Caudal Section -->
 <div class="content-section" id="caudal-section" style="display: none;">
+    <div class="container-fluid p-4">
     <div class="row mb-4">
         <div class="col-12">
             <h2 class="mb-4"><i class="fas fa-tint text-primary"></i> Datos de Caudal</h2>
         </div>
     </div>
-    
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0">Caudal por Sensor (m³/s)</h5>
+                    <h5 class="mb-0">Caudal por Sensor Rio Quijos(m³/s)</h5>
+                    <button class="btn btn-sm btn-outline-primary float-end btn-analizar-ia" data-grafico-id="caudalChart" data-seccion="caudal">
+    <i class="fas fa-robot"></i> Analizar con IA
+</button>
                 </div>
                 <div class="card-body">
                     <div class="chart-container">
@@ -131,6 +260,9 @@
             <div class="card mt-4">
     <div class="card-header">
         <h5 class="mb-0">Caudal por Sensor - Papallacta</h5>
+        <button class="btn btn-sm btn-outline-primary float-end btn-analizar-ia" data-grafico-id="caudalPapallactaChart" data-seccion="caudal_papallacta">
+    <i class="fas fa-robot"></i> Analizar con IA
+</button>
     </div>
     <div class="card-body">
         <div class="chart-container">
@@ -138,24 +270,26 @@
         </div>
     </div>
 </div>
-
         </div>
     </div>
+    </div>
 </div>
-
 <!-- Nivel Section -->
 <div class="content-section" id="nivel-section" style="display: none;">
+    <div class="container-fluid p-4">
     <div class="row mb-4">
         <div class="col-12">
             <h2 class="mb-4"><i class="fas fa-chart-line text-primary"></i> Datos de Nivel</h2>
         </div>
     </div>
-    
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0">Nivel por Sensor (m)</h5>
+                    <h5 class="mb-0">Nivel por Sensor Rio Quijos(m)</h5>
+                    <button class="btn btn-sm btn-outline-primary float-end btn-analizar-ia" data-grafico-id="nivelChart" data-seccion="nivel">
+    <i class="fas fa-robot"></i> Analizar con IA
+</button>
                 </div>
                 <div class="card-body">
                     <div class="chart-container">
@@ -166,6 +300,9 @@
             <div class="card mt-4">
     <div class="card-header">
         <h5 class="mb-0">Nivel por Sensor - Papallacta</h5>
+        <button class="btn btn-sm btn-outline-primary float-end btn-analizar-ia" data-grafico-id="nivelPapallactaChart" data-seccion="nivel_papallacta">
+    <i class="fas fa-robot"></i> Analizar con IA
+</button>
     </div>
     <div class="card-body">
         <div class="chart-container">
@@ -173,19 +310,18 @@
         </div>
     </div>
 </div>
-
         </div>
     </div>
+    </div>
 </div>
-
 <!-- Mapa Section -->
 <div class="content-section" id="mapa-section" style="display: none;">
+    <div class="container-fluid p-4">
     <div class="row mb-4">
         <div class="col-12">
             <h2 class="mb-4"><i class="fas fa-map-marked-alt text-primary"></i> Mapa Detallado</h2>
         </div>
     </div>
-    
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -198,9 +334,38 @@
             </div>
         </div>
     </div>
+    </div>
+</div>
+<!-- Modal del Chatbot IA -->
+<div class="modal fade" id="chatbotModal" tabindex="-1" aria-labelledby="chatbotModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="chatbotModalLabel"><i class="fas fa-robot me-2"></i>Análisis IA - Dashboard Hidrológico</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="chat-messages" class="mb-3">
+             <!-- Los mensajes del chat se insertarán aquí dinámicamente -->
+             <!-- Mensaje de bienvenida inicial -->
+             <div class="alert alert-info">
+                 <i class="fas fa-info-circle me-2"></i>
+                 Selecciona un gráfico y haz clic en el botón "Analizar con IA" para obtener un análisis automatizado.
+             </div>
+        </div>
+        <!-- Input para preguntas adicionales (opcional para interacción futura) -->
+        <div class="input-group mb-3 d-none" id="chat-input-group">
+          <input type="text" class="form-control" placeholder="Escribe una pregunta..." id="chat-input">
+          <button class="btn btn-outline-primary" type="button" id="chat-send-btn"><i class="fas fa-paper-plane"></i></button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
-
 {% block extra_js %}
 <script>
 let map, detailedMap;
@@ -218,7 +383,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Initialize main map
 function initializeMap() {
     map = L.map('map').setView([-0.562767, -78.182822], 11);
-    
+
     // Add terrain layer
     L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenTopoMap contributors',
@@ -309,7 +474,7 @@ const iconoHidro = L.icon({
 });
 
 
-    
+
     // Load river coordinates
     fetch('/api/rio-coords')
     .then(response => response.json())
@@ -354,13 +519,13 @@ const iconoHidro = L.icon({
 // Initialize detailed map
 function initializeDetailedMap() {
     detailedMap = L.map('detailedMap').setView([-0.562767, -78.182822], 12);
-    
+
     // Add satellite layer
     L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenTopoMap contributors',
         maxZoom: 17
     }).addTo(detailedMap);
-    
+
     // Load river coordinates for detailed map
     fetch('/api/rio-coords')
     .then(response => response.json())
@@ -410,7 +575,7 @@ function loadStats() {
             if (data.total_registros) {
                 const totalRegistros = Object.values(data.total_registros).reduce((a, b) => a + b, 0);
                 document.getElementById('total-registros').textContent = totalRegistros;
-                
+
                 const totalSensores = Object.values(data.sensores_activos).reduce((a, b) => a + b, 0);
                 document.getElementById('sensores-activos').textContent = totalSensores;
             }
@@ -476,6 +641,7 @@ function loadPrecipitacionChart() {
                     }
                 }
             });
+            window.precipitacionChart = precipitacionChart;
         })
         .catch(error => {
             console.error('Error loading precipitación data:', error);
@@ -530,6 +696,7 @@ function loadCaudalChart() {
                     }
                 }
             });
+            window.caudalChart = caudalChart;
         })
         .catch(error => {
             console.error('Error loading caudal data:', error);
@@ -584,6 +751,7 @@ function loadNivelChart() {
                     }
                 }
             });
+            window.nivelChart = nivelChart;
         })
         .catch(error => {
             console.error('Error loading nivel data:', error);
@@ -620,6 +788,7 @@ function loadPrecipitacionPapallactaChart() {
                     }
                 }
             });
+             window.precipitacionPapallactaChart = precipitacionPapallactaChart;
         });
 }
 
@@ -652,6 +821,7 @@ function loadCaudalPapallactaChart() {
                     }
                 }
             });
+             window.caudalPapallactaChart = caudalPapallactaChart;
         });
 }
 
@@ -684,6 +854,7 @@ function loadNivelPapallactaChart() {
                     }
                 }
             });
+            window.nivelPapallactaChart = nivelPapallactaChart;
         });
 }
 
@@ -787,5 +958,173 @@ function refreshData() {
 
 // Auto refresh every 5 minutes
 setInterval(refreshData, 300000);
+
+// --- Añade este código JavaScript al final del bloque extra_js ---
+console.log("Inicializando funcionalidad del Chatbot IA...");
+
+// Variable para almacenar la referencia al gráfico actualmente en análisis
+let graficoEnAnalisis = null;
+let seccionEnAnalisis = null;
+
+// Función para obtener los datos del gráfico de Chart.js
+function obtenerDatosGrafico(nombreGrafico) {
+    // Accede a la variable global del gráfico (definida en tu JS existente)
+    let chartInstance = window[nombreGrafico];
+    if (chartInstance && chartInstance.data) {
+        // Devolvemos una copia serializable de los datos
+        return {
+            labels: chartInstance.data.labels,
+            datasets: chartInstance.data.datasets.map(ds => ({
+                label: ds.label,
+                data: ds.data
+                // Puedes añadir más propiedades si son relevantes para el análisis
+            }))
+        };
+    } else {
+        console.error(`No se encontró el gráfico con nombre: ${nombreGrafico}`);
+        return null;
+    }
+}
+
+// Función para mostrar mensajes en el modal del chat
+function mostrarMensajeEnChat(mensaje, tipo='info') {
+    const chatMessages = document.getElementById('chat-messages');
+    const alertClass = tipo === 'error' ? 'alert-danger' : tipo === 'success' ? 'alert-success' : 'alert-info';
+    const iconClass = tipo === 'error' ? 'fa-exclamation-triangle' : tipo === 'success' ? 'fa-check-circle' : 'fa-info-circle';
+
+    const mensajeElemento = document.createElement('div');
+    mensajeElemento.className = `alert ${alertClass} alert-dismissible fade show`;
+    mensajeElemento.role = 'alert';
+    mensajeElemento.innerHTML = `
+        <i class="fas ${iconClass} me-2"></i>
+        ${mensaje}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+    chatMessages.appendChild(mensajeElemento);
+    // Hacer scroll hacia abajo
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Función para solicitar análisis al backend
+async function solicitarAnalisis(nombreGrafico, seccion) {
+    console.log(`Solicitando análisis para el gráfico: ${nombreGrafico} en la sección: ${seccion}`);
+
+    const datos = obtenerDatosGrafico(nombreGrafico);
+    if (!datos) {
+        mostrarMensajeEnChat('No se pudieron obtener los datos del gráfico seleccionado.', 'error');
+        return;
+    }
+
+    // Guardar referencia para posibles interacciones futuras
+    graficoEnAnalisis = nombreGrafico;
+    seccionEnAnalisis = seccion;
+
+    // Mostrar modal
+    const chatModal = new bootstrap.Modal(document.getElementById('chatbotModal'));
+    const chatMessages = document.getElementById('chat-messages');
+
+    // Limpiar mensajes anteriores y mostrar mensaje de carga
+    chatMessages.innerHTML = '';
+    mostrarMensajeEnChat('Enviando datos al asistente IA... <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>', 'info');
+
+    chatModal.show();
+
+    try {
+        const response = await fetch('/api/analizar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                grafico_id: nombreGrafico,
+                seccion: seccion,
+                datos: datos
+                // contexto: "" // Se puede añadir un input para que el usuario dé contexto
+            })
+        });
+
+        if (!response.ok) {
+            // Manejar errores HTTP
+            let errorMsg = 'Error desconocido al comunicarse con el servidor.';
+            if (response.status === 503) {
+                 errorMsg = 'El servicio de análisis IA no está disponible. ¿Se configuró correctamente la clave API?';
+            } else if (response.status === 400) {
+                errorMsg = 'Datos enviados al servidor incompletos o inválidos.';
+            } else {
+                errorMsg = `Error del servidor: ${response.status} - ${response.statusText}`;
+            }
+            throw new Error(errorMsg);
+        }
+
+        const data = await response.json();
+
+        if (data.error) {
+            // Manejar errores devueltos por el backend
+            throw new Error(data.error);
+        }
+
+        if (data.analisis) {
+            // Mostrar la respuesta exitosa en el chat
+            mostrarMensajeEnChat(`<strong>Análisis para ${nombreGrafico}:</strong><br>${data.analisis.replace(/\n/g, '<br>')}`, 'success');
+            // Opcional: Mostrar el input para más preguntas
+            // document.getElementById('chat-input-group').classList.remove('d-none');
+        } else {
+             mostrarMensajeEnChat('El servidor respondió, pero no se recibió un análisis.', 'error');
+        }
+
+
+    } catch (error) {
+        console.error('Error al solicitar análisis:', error);
+        mostrarMensajeEnChat(`Error: ${error.message}`, 'error');
+        // Opcional: Ocultar el input si hay error
+        // document.getElementById('chat-input-group').classList.add('d-none');
+    }
+}
+
+// Añadir event listeners a los botones de análisis
+document.addEventListener('DOMContentLoaded', function() {
+    // Seleccionar todos los botones con la clase 'btn-analizar-ia'
+    document.querySelectorAll('.btn-analizar-ia').forEach(boton => {
+        boton.addEventListener('click', function() {
+            // Obtener los atributos data del botón
+            const graficoId = this.getAttribute('data-grafico-id');
+            const seccion = this.getAttribute('data-seccion');
+            if (graficoId && seccion) {
+                solicitarAnalisis(graficoId, seccion);
+            } else {
+                console.error('Botón de análisis sin atributos data-grafico-id o data-seccion válidos.');
+                alert('Error: No se pudo identificar el gráfico para el análisis.');
+            }
+        });
+    });
+
+    // Opcional: Lógica para el input de chat (enviar mensaje al presionar Enter o clic en enviar)
+    const chatInput = document.getElementById('chat-input');
+    const chatSendBtn = document.getElementById('chat-send-btn');
+
+    if (chatInput && chatSendBtn) {
+        const enviarMensaje = () => {
+             const mensaje = chatInput.value.trim();
+             if (mensaje) {
+                 mostrarMensajeEnChat(`<strong>Tú:</strong> ${mensaje}`, 'info');
+                 chatInput.value = '';
+                 // Aquí iría la lógica para enviar el mensaje a Gemini y obtener una respuesta
+                 // Por ahora, simulamos una respuesta
+                 setTimeout(() => {
+                     mostrarMensajeEnChat(`<strong>IA:</strong> Entendido. Esta funcionalidad de conversación continua está en desarrollo.`, 'success');
+                 }, 1000);
+             }
+        };
+
+        chatSendBtn.addEventListener('click', enviarMensaje);
+        chatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                enviarMensaje();
+            }
+        });
+    }
+});
+
+console.log("Funcionalidad del Chatbot IA inicializada.");
 </script>
 {% endblock %}
