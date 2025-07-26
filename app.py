@@ -358,5 +358,5 @@ def api_analizar():
         return jsonify({'error': 'Ocurrió un error interno en el servidor al procesar la solicitud de análisis.'}), 500
 
 
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+#if __name__ == '__main__':
+  # app.run(debug=True, host='0.0.0.0', port=5000)
