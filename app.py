@@ -94,16 +94,22 @@ def process_data_for_charts(df, data_type):
 
         # Colores para diferentes sensores
         colors = {
-            'P42': 'rgba(54, 162, 235, 0.8)',
-            'P43': 'rgba(255, 99, 132, 0.8)',
-            'P55': 'rgba(75, 192, 192, 0.8)',
-            'H44': 'rgba(153, 102, 255, 0.8)',
-            'H55': 'rgba(255, 159, 64, 0.8)',
-            'P34': 'rgba(54, 162, 235, 0.8)',
-            'P63': 'rgba(255, 99, 132, 0.8)',
-            'M5023': 'rgba(75, 192, 192, 0.8)',
-            'H34': 'rgba(153, 102, 255, 0.8)',
-            'H45': 'rgba(255, 159, 64, 0.8)'
+            'M5023': 'rgba(40, 30, 209, 0.8)',
+            'H31': 'rgba(35, 158, 184, 0.8)',
+            'H32': 'rgba(11, 126, 24, 0.8)',
+            'H33': 'rgba(153, 102, 255, 0.8)',
+            'H34': 'rgba(133, 157, 23, 0.8)',
+            'H36': 'rgba(53, 11, 142, 0.8)',
+            'H45': 'rgba(192, 6, 167, 0.8)',
+            'H46': 'rgba(201, 142, 5, 0.8)',
+            'P34': 'rgba(35, 158, 184, 0.8)',
+            'P38': 'rgba(11, 126, 24, 0.8)',
+            'P42': 'rgba(133, 157, 23, 0.8)',
+            'P43': 'rgba(153, 102, 255, 0.8)',
+            'P46': 'rgba(53, 11, 142, 0.8)',
+            'P55': 'rgba(192, 6, 167, 0.8)',
+            'P57': 'rgba(201, 142, 5, 0.8)',
+
         }
 
         for column in df.columns:
@@ -138,7 +144,7 @@ def index():
 @app.route('/api/precipitacion')
 def api_precipitacion():
     """API para datos de precipitación"""
-    df = safe_read_csv('precipitacion.csv')
+    df = safe_read_csv('precipitacion_quijos.csv')
     data = process_data_for_charts(df, 'Precipitación (mm)')
     return jsonify(data)
 
@@ -146,7 +152,7 @@ def api_precipitacion():
 @app.route('/api/caudal')
 def api_caudal():
     """API para datos de caudal"""
-    df = safe_read_csv('caudal.csv')
+    df = safe_read_csv('caudal_quijos.csv')
     data = process_data_for_charts(df, 'Caudal (m³/s)')
     return jsonify(data)
 
@@ -154,25 +160,25 @@ def api_caudal():
 @app.route('/api/nivel')
 def api_nivel():
     """API para datos de nivel"""
-    df = safe_read_csv('nivel.csv')
+    df = safe_read_csv('nivel_quijos.csv')
     data = process_data_for_charts(df, 'Nivel (m)')
     return jsonify(data)
 
 @app.route('/api/precipitacion_papallacta')
 def api_precipitacion_papallacta():
-    df = safe_read_csv('papallactaprecipitacion.csv')
+    df = safe_read_csv('precipitacion_papallacta.csv')
     data = process_data_for_charts(df, 'Precipitación Papallacta (mm)')
     return jsonify(data)
 
 @app.route('/api/caudal_papallacta')
 def api_caudal_papallacta():
-    df = safe_read_csv('caudalpapallacta.csv')
+    df = safe_read_csv('caudal_papallacta.csv')
     data = process_data_for_charts(df, 'Caudal Papallacta (m³/s)')
     return jsonify(data)
 
 @app.route('/api/nivel_papallacta')
 def api_nivel_papallacta():
-    df = safe_read_csv('nivelpapallacta.csv')
+    df = safe_read_csv('nivel_papallacta.csv')
     data = process_data_for_charts(df, 'Nivel Papallacta (m)')
     return jsonify(data)
 
@@ -222,12 +228,12 @@ def api_rio_coords():
 def api_stats():
     """API para estadísticas generales"""
     try:
-        precipitacion_df = safe_read_csv('precipitacion.csv')
-        caudal_df = safe_read_csv('caudal.csv')
-        nivel_df = safe_read_csv('nivel.csv')
-        precipitacionpapallacta_df = safe_read_csv('papallactaprecipitacion.csv')
-        caudalpapallacta_df = safe_read_csv('caudalpapallacta.csv')
-        nivelpapallacta_df = safe_read_csv('nivelpapallacta.csv')
+        precipitacion_df = safe_read_csv('precipitacion_quijos.csv')
+        caudal_df = safe_read_csv('caudal_quijos.csv')
+        nivel_df = safe_read_csv('nivel_quijos.csv')
+        precipitacionpapallacta_df = safe_read_csv('precipitacion_papallacta.csv')
+        caudalpapallacta_df = safe_read_csv('caudal_papallacta.csv')
+        nivelpapallacta_df = safe_read_csv('nivel_papallacta.csv')
 
         stats = {
             'total_registros': {
@@ -240,7 +246,7 @@ def api_stats():
                     [col for col in precipitacion_df.columns if col != 'Fecha']) if not precipitacion_df.empty else 0)+(len(
                     [col for col in precipitacionpapallacta_df.columns if col != 'Fecha']) if not precipitacionpapallacta_df.empty else 0),
                 'caudal': (len([col for col in caudal_df.columns if col != 'Fecha']) if not caudal_df.empty else 0)+(len([col for col in caudalpapallacta_df.columns if col != 'Fecha']) if not caudalpapallacta_df.empty else 0),
-                'nivel': (len([col for col in nivel_df.columns if col != 'Fecha']) if not nivel_df.empty else 0)+(len([col for col in nivelpapallacta_df.columns if col != 'Fecha']) if not nivelpapallacta_df.empty else 0)
+                'nivel': (len([col for col in nivel_df.columns if col != 'Fecha']) if not nivel_df.empty else 0)
             }
         }
 
@@ -359,4 +365,4 @@ def api_analizar():
 
 
 if __name__ == '__main__':
-   app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5000)
