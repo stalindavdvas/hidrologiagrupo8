@@ -22,6 +22,7 @@
                 <li><a href="#informacion">Información</a></li>
                 <li><a href="#mapa">Ubicacion Sensores</a></li>
                 <li><a href="#datos">Graficos</a></li>
+                <li><a href="#correlacion">Resultados</a></li>
                 <li><a href="#sensores">Recomendaciones</a></li>
             </ul>
         </nav>
@@ -274,12 +275,203 @@ Hidroeléctrica Coca Codo Sinclair desde el volcán Antisana, incluyendo los rí
                         🔍 Ampliar
                     </button>
                 </div>
-
-
             </div>
         </div>
     </section>
+        <!-- Sección de Resultados de Correlación Caudal-Nivel -->
+    <section class="graphics-section" id="correlacion">
+        <div class="container">
+            <h2 class="section-title">Resultado de Análisis de Correlación</h2>
+            <p class="section-subtitle">Relación entre el caudal y el nivel del agua, asi como precipitacion-nivel y preciptacion-caudal en las estaciones de monitoreo. Los modelos de regresión ayudan a estimar uno a partir del otro.</p>
+             <!-- Título divisor para Correlación Precipitación-Caudal -->
+                <div class="chart-divider">
+                    <h3 class="chart-divider-title">Correlación Caudal-Nivel</h3>
+                </div>
+            <div class="charts-grid">
+                <!-- Tarjeta para Correlación Papallacta -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-icon">🔗</div>
+                        <h3 class="chart-title">Correlación Papallacta</h3>
+                        <div class="chart-sensor">
+                            <!-- Puedes añadir un botón de análisis IA aquí si lo deseas en el futuro -->
+                            <!-- <button class="btn-analizar-ia-custom float-end" data-estacion="papallacta" data-tipo="correlacion">🤖 Analizar</button> -->
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="correlacionPapallactaChart"></canvas>
+                        <!-- Contenedor para estadísticas -->
+                        <div id="stats-correlacion-papallacta" class="correlacion-stats"></div>
+                    </div>
+                    <!-- Botón para ver gráfico grande -->
+                    <button class="btn-ver-grande" data-grafico-id="correlacionPapallactaChart" data-seccion="correlacion_papallacta">
+                        🔍 Ampliar
+                    </button>
+                </div>
 
+                <!-- Tarjeta para Correlación Quijos -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-icon">🔗</div>
+                        <h3 class="chart-title">Correlación Quijos</h3>
+                        <div class="chart-sensor">
+                            <!-- <button class="btn-analizar-ia-custom float-end" data-estacion="quijos" data-tipo="correlacion">🤖 Analizar</button> -->
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="correlacionQuijosChart"></canvas>
+                        <!-- Contenedor para estadísticas -->
+                        <div id="stats-correlacion-quijos" class="correlacion-stats"></div>
+                    </div>
+                    <!-- Botón para ver gráfico grande -->
+                    <button class="btn-ver-grande" data-grafico-id="correlacionQuijosChart" data-seccion="correlacion_quijos">
+                        🔍 Ampliar
+                    </button>
+                </div>
+                 <!-- Título divisor para Correlación Precipitación-Nivel -->
+                <div class="chart-divider">
+                    <h3 class="chart-divider-title">Correlación Precipitación-Nivel</h3>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-icon">🌧️</div> <!-- Icono de lluvia -->
+                        <h3 class="chart-title">Precip-Nivel Papallacta</h3>
+                        <div class="chart-sensor">
+                            <!-- Botón de análisis IA -->
+                            <button class="btn-analizar-ia-custom float-end" data-grafico-id="correlacionPrecipNivelPapallactaChart" data-seccion="correlacion_precip_nivel_papallacta">
+                                🤖 Analizar con IA
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="correlacionPrecipNivelPapallactaChart"></canvas>
+                        <!-- Contenedor para estadísticas -->
+                        <div id="stats-correlacion-precip-nivel-papallacta" class="correlacion-stats"></div>
+                    </div>
+                    <!-- Botón para ver gráfico grande -->
+                    <button class="btn-ver-grande" data-grafico-id="correlacionPrecipNivelPapallactaChart">
+                        🔍 Ampliar
+                    </button>
+                </div>
+
+                <!-- Tarjeta para Correlación Precip-Nivel Quijos -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-icon">🌧️</div>
+                        <h3 class="chart-title">Precip-Nivel Quijos</h3>
+                        <div class="chart-sensor">
+                            <!-- Botón de análisis IA -->
+                            <button class="btn-analizar-ia-custom float-end" data-grafico-id="correlacionPrecipNivelQuijosChart" data-seccion="correlacion_precip_nivel_quijos">
+                                🤖 Analizar con IA
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="correlacionPrecipNivelQuijosChart"></canvas>
+                        <!-- Contenedor para estadísticas -->
+                        <div id="stats-correlacion-precip-nivel-quijos" class="correlacion-stats"></div>
+                    </div>
+                    <!-- Botón para ver gráfico grande -->
+                    <button class="btn-ver-grande" data-grafico-id="correlacionPrecipNivelQuijosChart">
+                        🔍 Ampliar
+                    </button>
+                </div>
+                 <!-- Título divisor para Correlación Precipitación-Caudal -->
+                <div class="chart-divider">
+                    <h3 class="chart-divider-title">Correlación Precipitación-Caudal</h3>
+                </div>
+                <!-- Tarjeta para Correlación Precip-Caudal Papallacta -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-icon">🌧️</div> <!-- Icono de lluvia -->
+                        <h3 class="chart-title">Precip-Caudal Papallacta</h3>
+                        <div class="chart-sensor">
+                            <!-- Botón de análisis IA -->
+                            <button class="btn-analizar-ia-custom float-end" data-grafico-id="correlacionPrecipCaudalPapallactaChart" data-seccion="correlacion_precip_caudal_papallacta">
+                                🤖 Analizar con IA
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="correlacionPrecipCaudalPapallactaChart"></canvas>
+                        <!-- Contenedor para estadísticas -->
+                        <div id="stats-correlacion-precip-caudal-papallacta" class="correlacion-stats"></div>
+                    </div>
+                    <!-- Botón para ver gráfico grande -->
+                    <button class="btn-ver-grande" data-grafico-id="correlacionPrecipCaudalPapallactaChart">
+                        🔍 Ampliar
+                    </button>
+                </div>
+
+                <!-- Tarjeta para Correlación Precip-Caudal Quijos -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-icon">🌧️</div>
+                        <h3 class="chart-title">Precip-Caudal Quijos</h3>
+                        <div class="chart-sensor">
+                            <!-- Botón de análisis IA -->
+                            <button class="btn-analizar-ia-custom float-end" data-grafico-id="correlacionPrecipCaudalQuijosChart" data-seccion="correlacion_precip_caudal_quijos">
+                                🤖 Analizar con IA
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="correlacionPrecipCaudalQuijosChart"></canvas>
+                        <!-- Contenedor para estadísticas -->
+                        <div id="stats-correlacion-precip-caudal-quijos" class="correlacion-stats"></div>
+                    </div>
+                    <!-- Botón para ver gráfico grande -->
+                    <button class="btn-ver-grande" data-grafico-id="correlacionPrecipCaudalQuijosChart">
+                        🔍 Ampliar
+                    </button>
+                </div>
+                <!-- === AQUÍ TERMINA LA NUEVA PARTE A AÑADIR === -->
+            </div>
+        </div>
+    </section>
+    <!-- Fin de Sección de Resultados de Correlación -->
+    <!-- Sección de Contribución de Afluentes -->
+    <section class="graphics-section" id="contribucion">
+        <div class="container">
+            <h2 class="section-title">Contribución de Afluentes al Caudal Mínimo Ecológico</h2>
+            <p class="section-subtitle">Análisis de cuánto aportan los ríos Papallacta y Quijos al caudal mínimo requerido de 127 m³/s para Coca Codo Sinclair.</p>
+
+            <div class="charts-grid">
+                <!-- Tarjeta para el gráfico de barras -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-icon">📊</div>
+                        <h3 class="chart-title">Porcentaje de Contribución</h3>
+                        <div class="chart-sensor">
+                            <!-- Puedes añadir un botón de análisis IA aquí si lo deseas -->
+                            <!-- <button class="btn-analizar-ia-custom float-end" data-grafico-id="contribucionAfluentesChart" data-seccion="contribucion_afluentes">🤖 Analizar</button> -->
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="contribucionAfluentesChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Tarjeta para estadísticas y texto -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-icon">ℹ️</div>
+                        <h3 class="chart-title">Resumen de Contribución</h3>
+                        <div class="chart-sensor">
+                            <!-- Puedes añadir indicadores o fechas aquí -->
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <div id="contribucion-stats-text">
+                            <!-- Los datos se insertarán aquí dinámicamente -->
+                            <p style="text-align: center; color: #6c757d;">Cargando análisis...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Fin de Sección de Contribución de Afluentes -->
     <!-- Features Section -->
     <section class="features-section" id="sensores">
         <div class="container">

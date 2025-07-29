@@ -1383,3 +1383,81 @@
     }
 
     /* === Fin de Estilos para Modales de Características y Tablas === */
+
+      /* --- Estilos para estadísticas de correlación --- */
+    .correlacion-stats {
+        margin-top: 1rem;
+        padding: 0.8rem;
+        background-color: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        font-size: 0.85rem;
+        line-height: 1.4;
+    }
+
+    .correlacion-stats h4 {
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+        color: #64c8ff;
+        text-align: center;
+    }
+
+    .correlacion-stats p {
+        margin: 0.3rem 0;
+    }
+
+    .correlacion-stats .stat-value {
+        font-weight: bold;
+        color: white;
+    }
+    /* --- Fin de Estilos para estadísticas de correlación --- */
+      /* --- Estilos para el título divisor dentro de grids de gráficos --- */
+    .chart-divider {
+        grid-column: 1 / -1; /* Ocupa toda la fila del grid */
+        text-align: center;
+        margin: 2rem 0 1rem 0; /* Espacio arriba y abajo */
+        padding: 0.5rem 0;
+        border-bottom: 2px solid rgba(100, 200, 255, 0.3); /* Línea sutil */
+    }
+
+    .chart-divider-title {
+        color: #64c8ff;
+        font-size: 1.4rem;
+        font-weight: 600;
+        display: inline-block;
+        background: rgba(26, 35, 50, 0.8); /* Fondo para que la línea no cruce el texto */
+        padding: 0 1rem;
+        position: relative;
+        z-index: 1;
+    }
+    /* --- Fin de Estilos para el título divisor --- */
+/* --- Corrección de visibilidad para el texto del resumen de contribución --- */
+
+/* Forzar color de texto oscuro para el contenido del resumen */
+#contribucion-stats-text {
+    color: #1a1f2e; /* Un gris oscuro, casi negro, coherente con tu paleta */
+    /* O puedes usar color: #333; o color: black; si prefieres */
+}
+
+/* Asegurar que los elementos hijos también hereden el color correcto */
+#contribucion-stats-text h4 {
+    color: #1a1f2e; /* Color para el título */
+    /* O usar el color azul principal si se ve mejor: color: #64c8ff; */
+}
+
+/* Asegurar que el span.stat-highlight sea visible */
+#contribucion-stats-text .stat-highlight {
+    color: #1a1f2e; /* Color oscuro para el texto resaltado */
+    font-weight: bold;
+    /* Si quieres mantener el resaltado azul claro: color: #64c8ff; */
+}
+
+/* Asegurar que la clasificación sea visible */
+#contribucion-stats-text .clasificacion {
+    color: #1a1f2e; /* Color oscuro para la clasificación */
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+/* --- Fin de Corrección de visibilidad --- */

@@ -9,3 +9,5 @@ click
 blinker
 google-genai
 python-dotenv
+scipy
+scikit-learn

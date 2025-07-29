@@ -350,6 +350,13 @@ function loadCharts() {
     loadCaudalPapallactaChart();
     loadNivelQuijosChart();
     loadNivelPapallactaChart();
+    // --- AÑADE ESTAS LÍNEAS ---
+    loadCorrelacionPapallactaChart();
+    loadCorrelacionQuijosChart();
+    loadAllCorrelacionPrecipNivelCharts();
+    loadAllCorrelacionPrecipCaudalCharts();
+     loadContribucionAfluentes();
+    // --- FIN DE AÑADIDURA ---
 }
 
 // Load precipitación chart
@@ -1150,7 +1157,15 @@ document.addEventListener('DOMContentLoaded', function() {
             'caudalChart': 'caudal',
             'caudalPapallactaChart': 'caudal_papallacta',
             'nivelChart': 'nivel',
-            'nivelPapallactaChart': 'nivel_papallacta'
+            'nivelPapallactaChart': 'nivel_papallacta',
+            // --- AÑADE ESTAS LÍNEAS PARA LOS GRÁFICOS DE CORRELACIÓN ---
+    'correlacionPapallactaChart': 'correlacion_papallacta',
+    'correlacionQuijosChart': 'correlacion_quijos',
+         'correlacionPrecipNivelPapallactaChart': 'correlacion_precip_nivel_papallacta',
+    'correlacionPrecipNivelQuijosChart': 'correlacion_precip_nivel_quijos',
+               'correlacionPrecipCaudalPapallactaChart': 'correlacion_precip_caudal_papallacta',
+    'correlacionPrecipCaudalQuijosChart': 'correlacion_precip_caudal_quijos'
+    // --- FIN DE AÑADIDURA ---
             // Añade más mapeos si tienes otros gráficos
         };
         // --- Fin de Variables globales adicionales ---
@@ -1391,3 +1406,579 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // === Fin de Funciones para Modales de Características ===
+          // === Variables globales para los gráficos de correlación ===
+        let correlacionPapallactaChart = null;
+        let correlacionQuijosChart = null;
+        // === Fin de Variables globales ===
+
+
+        // === Funciones para cargar gráficos de correlación ===
+
+        // Función genérica para cargar y mostrar un gráfico de correlación
+        function loadCorrelacionChart(estacion, canvasId, statsContainerId) {
+            console.log(`Cargando datos de correlación para: ${estacion}`);
+            fetch(`/api/correlacion/${estacion}`)
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 404) {
+                            throw new Error(`No se encontraron datos para la estación ${estacion}.`);
+                        } else if (response.status === 400) {
+                             throw new Error(`Solicitud incorrecta para la estación ${estacion}.`);
+                        } else {
+                             throw new Error(`Error del servidor (${response.status}) al cargar datos de correlación para ${estacion}.`);
+                        }
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    if (!data.success) {
+                         throw new Error(`Respuesta inesperada del servidor para ${estacion}.`);
+                    }
+
+                    const ctx = document.getElementById(canvasId).getContext('2d');
+                    const statsContainer = document.getElementById(statsContainerId);
+
+                    // 1. Destruir gráfico existente si hay uno
+                    if (window[canvasId]) { // Usamos window[canvasId] para acceder a la variable global
+                        window[canvasId].destroy();
+                    }
+
+                    // 2. Crear el nuevo gráfico usando los datos formateados de chartjs_data
+                    const chartInstance = new Chart(ctx, {
+                        type: 'scatter', // Tipo Scatter para puntos y líneas
+                        data: data.chartjs_data, // Datos ya formateados para Chart.js
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: `Caudal vs Nivel - ${data.estacion}`
+                                },
+                                legend: {
+                                    position: 'top',
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        // Personalizar tooltips si es necesario
+                                        label: function(context) {
+                                            let label = context.dataset.label || '';
+                                            if (context.parsed.y !== null) {
+                                                // Para puntos de datos observados
+                                                if (context.datasetIndex === 0) {
+                                                    label += ` (Nivel: ${context.parsed.x.toFixed(2)}, Caudal: ${context.parsed.y.toFixed(2)})`;
+                                                } else {
+                                                    // Para líneas de regresión
+                                                    label += ` (Nivel: ${context.parsed.x.toFixed(2)}, Caudal Estimado: ${context.parsed.y.toFixed(2)})`;
+                                                }
+                                            }
+                                            return label;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Nivel del Agua (m)'
+                                    },
+                                    // Puedes añadir min/max o ticks si es necesario
+                                },
+                                y: {
+                                    beginAtZero: false, // Caudal puede no empezar en 0
+                                    title: {
+                                        display: true,
+                                        text: 'Caudal (m³/s)'
+                                    }
+                                    // Puedes añadir min/max o ticks si es necesario
+                                }
+                            },
+                            interaction: {
+                                mode: 'nearest', // Mejor para scatter plots
+                                axis: 'x'
+                            }
+                        }
+                    });
+
+                    // 3. Almacenar la instancia en una variable global para referencia futura
+                    // (Esto permite que 'Ampliar' y 'Analizar con IA' funcionen si se implementan)
+                    window[canvasId] = chartInstance;
+
+                    // 4. Mostrar estadísticas
+                    if (statsContainer && data.estadisticas) {
+                        const stats = data.estadisticas;
+                        let statsHtml = `<h4>Estadísticas de Correlación - ${data.estacion}</h4>`;
+                        statsHtml += `<p>Total de puntos: <span class="stat-value">${stats.total_puntos}</span></p>`;
+
+                        if (stats.correlacion_pearson !== null) {
+                            statsHtml += `<p>Correlación Pearson (r): <span class="stat-value">${stats.correlacion_pearson.toFixed(3)}</span> (p=${stats.p_valor_pearson.toExponential(2)})</p>`;
+                        }
+                        if (stats.correlacion_spearman !== null) {
+                            statsHtml += `<p>Correlación Spearman (ρ): <span class="stat-value">${stats.correlacion_spearman.toFixed(3)}</span> (p=${stats.p_valor_spearman.toExponential(2)})</p>`;
+                        }
+
+                        if (stats.regresion_lineal) {
+                            statsHtml += `<p>Reg. Lineal (R²): <span class="stat-value">${stats.regresion_lineal.r2.toFixed(3)}</span></p>`;
+                            statsHtml += `<p style="font-size: 0.75rem; color: #aaa;">Ecuación: ${stats.regresion_lineal.ecuacion}</p>`;
+                        }
+                        if (stats.regresion_polinomica) {
+                            statsHtml += `<p>Reg. Polinómica (R²): <span class="stat-value">${stats.regresion_polinomica.r2.toFixed(3)}</span></p>`;
+                            statsHtml += `<p style="font-size: 0.75rem; color: #aaa;">Ecuación: ${stats.regresion_polinomica.ecuacion}</p>`;
+                        }
+
+                        statsContainer.innerHTML = statsHtml;
+                    }
+
+                    console.log(`✅ Gráfico de correlación cargado para: ${estacion}`);
+                })
+                .catch(error => {
+                    console.error(`Error loading correlación ${estacion} data:`, error);
+                    // Opcional: Mostrar mensaje de error en el contenedor del gráfico o stats
+                    const canvasContainer = document.getElementById(canvasId)?.parentElement;
+                    const statsContainer = document.getElementById(statsContainerId);
+                    if (statsContainer) {
+                         statsContainer.innerHTML = `<p style="color: #ff6b6b;">Error: ${error.message}</p>`;
+                    } else if (canvasContainer) {
+                        // Si no hay statsContainer, mostrar en el canvas (menos ideal)
+                        canvasContainer.innerHTML = `<p style="color: #ff6b6b; text-align: center; padding: 2rem;">Error al cargar el gráfico: ${error.message}</p>`;
+                    }
+                    // Asegurarse de que la variable global esté limpia
+                    window[canvasId] = null;
+                });
+        }
+
+        // Funciones específicas para cada estación
+        function loadCorrelacionPapallactaChart() {
+            loadCorrelacionChart('papallacta', 'correlacionPapallactaChart', 'stats-correlacion-papallacta');
+        }
+
+        function loadCorrelacionQuijosChart() {
+            loadCorrelacionChart('quijos', 'correlacionQuijosChart', 'stats-correlacion-quijos');
+        }
+
+        // Función para cargar ambos gráficos de correlación
+        function loadAllCorrelacionCharts() {
+            loadCorrelacionPapallactaChart();
+            loadCorrelacionQuijosChart();
+        }
+
+        // === Fin de Funciones para cargar gráficos de correlación ===
+          // === Variables globales para los gráficos de correlación Precipitación-Nivel ===
+        let correlacionPrecipNivelPapallactaChart = null;
+        let correlacionPrecipNivelQuijosChart = null;
+        // === Fin de Variables globales ===
+
+        // === Funciones para cargar gráficos de correlación Precipitación-Nivel ===
+
+        // Función genérica para cargar y mostrar un gráfico de correlación Precip-Nivel
+        function loadCorrelacionPrecipNivelChart(estacion, canvasId, statsContainerId) {
+            console.log(`Cargando datos de correlación Precip-Nivel para: ${estacion}`);
+            fetch(`/api/correlacion_precip_nivel/${estacion}`)
+                .then(response => {
+                     if (!response.ok) {
+                        if (response.status === 404) {
+                            throw new Error(`No se encontraron datos para la estación ${estacion}.`);
+                        } else if (response.status === 400) {
+                             throw new Error(`Solicitud incorrecta para la estación ${estacion}.`);
+                        } else {
+                             throw new Error(`Error del servidor (${response.status}) al cargar datos de correlación Precip-Nivel para ${estacion}.`);
+                        }
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    if (!data.success) {
+                         throw new Error(`Respuesta inesperada del servidor para ${estacion}.`);
+                    }
+
+                    const ctx = document.getElementById(canvasId).getContext('2d');
+                    const statsContainer = document.getElementById(statsContainerId);
+
+                    // 1. Destruir gráfico existente si hay uno
+                    if (window[canvasId]) {
+                        window[canvasId].destroy();
+                    }
+
+                    // 2. Crear el nuevo gráfico usando los datos formateados de chartjs_data
+                    // Usamos 'scatter' para puntos y líneas
+                    const chartInstance = new Chart(ctx, {
+                        type: 'scatter',
+                        data: data.chartjs_data,
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: `Precipitación vs Nivel - ${data.estacion}`
+                                },
+                                legend: {
+                                    position: 'top',
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            let label = context.dataset.label || '';
+                                            if (context.parsed.y !== null) {
+                                                if (context.datasetIndex === 0) { // Datos observados
+                                                    label += ` (Precip: ${context.parsed.x.toFixed(2)} mm, Nivel: ${context.parsed.y.toFixed(2)} m)`;
+                                                } else { // Líneas de regresión
+                                                    label += ` (Precip: ${context.parsed.x.toFixed(2)} mm, Nivel Estimado: ${context.parsed.y.toFixed(2)} m)`;
+                                                }
+                                            }
+                                            return label;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Precipitación Acumulada (mm)'
+                                    }
+                                },
+                                y: {
+                                    beginAtZero: false, // Nivel puede no empezar en 0
+                                    title: {
+                                        display: true,
+                                        text: 'Nivel del Agua (m)'
+                                    }
+                                }
+                            },
+                            interaction: {
+                                mode: 'nearest',
+                                axis: 'x'
+                            }
+                        }
+                    });
+
+                    // 3. Almacenar la instancia en una variable global
+                    window[canvasId] = chartInstance;
+
+                    // 4. Mostrar estadísticas
+                    if (statsContainer && data.estadisticas) {
+                        const stats = data.estadisticas;
+                        let statsHtml = `<h4>Estadísticas de Correlación - ${data.estacion}</h4>`;
+                        statsHtml += `<p>Total de puntos: <span class="stat-value">${stats.total_puntos}</span></p>`;
+
+                        if (stats.correlacion_pearson !== null) {
+                            statsHtml += `<p>Correlación Pearson (r): <span class="stat-value">${stats.correlacion_pearson.toFixed(3)}</span> (p=${stats.p_valor_pearson.toExponential(2)})</p>`;
+                        }
+                        if (stats.correlacion_spearman !== null) {
+                            statsHtml += `<p>Correlación Spearman (ρ): <span class="stat-value">${stats.correlacion_spearman.toFixed(3)}</span> (p=${stats.p_valor_spearman.toExponential(2)})</p>`;
+                        }
+
+                        if (stats.regresion_lineal) {
+                            statsHtml += `<p>Reg. Lineal (R²): <span class="stat-value">${stats.regresion_lineal.r2.toFixed(3)}</span>, RMSE: ${stats.regresion_lineal.rmse.toFixed(2)}</p>`;
+                            statsHtml += `<p style="font-size: 0.75rem; color: #aaa;">Ecuación: ${stats.regresion_lineal.ecuacion}</p>`;
+                        }
+                        if (stats.regresion_polinomica) {
+                            statsHtml += `<p>Reg. Polinómica (R²): <span class="stat-value">${stats.regresion_polinomica.r2.toFixed(3)}</span>, RMSE: ${stats.regresion_polinomica.rmse.toFixed(2)}</p>`;
+                        }
+
+                        statsContainer.innerHTML = statsHtml;
+                    }
+
+                    console.log(`✅ Gráfico de correlación Precip-Nivel cargado para: ${estacion}`);
+                })
+                .catch(error => {
+                    console.error(`Error loading correlación Precip-Nivel ${estacion}:`, error);
+                    const statsContainer = document.getElementById(statsContainerId);
+                    if (statsContainer) {
+                         statsContainer.innerHTML = `<p style="color: #ff6b6b;">Error: ${error.message}</p>`;
+                    }
+                    window[canvasId] = null;
+                });
+        }
+
+        // Funciones específicas para cada estación
+        function loadCorrelacionPrecipNivelPapallactaChart() {
+            loadCorrelacionPrecipNivelChart('papallacta', 'correlacionPrecipNivelPapallactaChart', 'stats-correlacion-precip-nivel-papallacta');
+        }
+
+        function loadCorrelacionPrecipNivelQuijosChart() {
+            loadCorrelacionPrecipNivelChart('quijos', 'correlacionPrecipNivelQuijosChart', 'stats-correlacion-precip-nivel-quijos');
+        }
+
+        // Función para cargar ambos gráficos de correlación Precip-Nivel
+        function loadAllCorrelacionPrecipNivelCharts() {
+            loadCorrelacionPrecipNivelPapallactaChart();
+            loadCorrelacionPrecipNivelQuijosChart();
+        }
+
+        // === Fin de Funciones para cargar gráficos de correlación Precipitación-Nivel ===
+          // === Variables globales para los gráficos de correlación Precipitación-Caudal ===
+        let correlacionPrecipCaudalPapallactaChart = null;
+        let correlacionPrecipCaudalQuijosChart = null;
+        // === Fin de Variables globales ===
+
+        // === Funciones para cargar gráficos de correlación Precipitación-Caudal ===
+
+        // Función genérica para cargar y mostrar un gráfico de correlación Precip-Caudal
+        function loadCorrelacionPrecipCaudalChart(estacion, canvasId, statsContainerId) {
+            console.log(`Cargando datos de correlación Precip-Caudal para: ${estacion}`);
+            fetch(`/api/correlacion_precip_caudal/${estacion}`)
+                .then(response => {
+                     if (!response.ok) {
+                        if (response.status === 404) {
+                            throw new Error(`No se encontraron datos para la estación ${estacion}.`);
+                        } else if (response.status === 400) {
+                             throw new Error(`Solicitud incorrecta para la estación ${estacion}.`);
+                        } else {
+                             throw new Error(`Error del servidor (${response.status}) al cargar datos de correlación Precip-Caudal para ${estacion}.`);
+                        }
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    if (!data.success) {
+                         throw new Error(`Respuesta inesperada del servidor para ${estacion}.`);
+                    }
+
+                    const ctx = document.getElementById(canvasId).getContext('2d');
+                    const statsContainer = document.getElementById(statsContainerId);
+
+                    // 1. Destruir gráfico existente si hay uno
+                    if (window[canvasId]) {
+                        window[canvasId].destroy();
+                    }
+
+                    // 2. Crear el nuevo gráfico usando los datos formateados de chartjs_data
+                    // Usamos 'scatter' para puntos y líneas
+                    const chartInstance = new Chart(ctx, {
+                        type: 'scatter',
+                         data: data.chartjs_data,
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: `Precipitación vs Caudal - ${data.estacion}`
+                                },
+                                legend: {
+                                    position: 'top',
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            let label = context.dataset.label || '';
+                                            if (context.parsed.y !== null) {
+                                                if (context.datasetIndex === 0) { // Datos observados
+                                                    label += ` (Precip: ${context.parsed.x.toFixed(2)} mm, Caudal: ${context.parsed.y.toFixed(2)} m³/s)`;
+                                                } else { // Línea de regresión
+                                                    label += ` (Precip: ${context.parsed.x.toFixed(2)} mm, Caudal Estimado: ${context.parsed.y.toFixed(2)} m³/s)`;
+                                                }
+                                            }
+                                            return label;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Precipitación Acumulada (mm)'
+                                    }
+                                },
+                                y: {
+                                    beginAtZero: true, // Caudal suele empezar en 0
+                                    title: {
+                                        display: true,
+                                        text: 'Caudal Promedio (m³/s)'
+                                    }
+                                }
+                            },
+                            interaction: {
+                                mode: 'nearest',
+                                axis: 'x'
+                            }
+                        }
+                    });
+
+                    // 3. Almacenar la instancia en una variable global
+                    window[canvasId] = chartInstance;
+
+                    // 4. Mostrar estadísticas
+                    if (statsContainer && data.estadisticas) {
+                        const stats = data.estadisticas;
+                        let statsHtml = `<h4>Estadísticas de Correlación - ${data.estacion}</h4>`;
+                        statsHtml += `<p>Total de puntos: <span class="stat-value">${stats.total_puntos}</span></p>`;
+
+                        if (stats.correlacion_pearson !== null) {
+                            statsHtml += `<p>Correlación Pearson (r): <span class="stat-value">${stats.correlacion_pearson.toFixed(3)}</span> (p=${stats.p_valor_pearson.toExponential(2)})</p>`;
+                        }
+                        if (stats.correlacion_spearman !== null) {
+                            statsHtml += `<p>Correlación Spearman (ρ): <span class="stat-value">${stats.correlacion_spearman.toFixed(3)}</span> (p=${stats.p_valor_spearman.toExponential(2)})</p>`;
+                        }
+
+                        if (stats.regresion_lineal) {
+                            statsHtml += `<p>Reg. Lineal (R²): <span class="stat-value">${stats.regresion_lineal.r2.toFixed(3)}</span>, RMSE: ${stats.regresion_lineal.rmse.toFixed(2)}</p>`;
+                            statsHtml += `<p style="font-size: 0.75rem; color: #aaa;">Ecuación: ${stats.regresion_lineal.ecuacion}</p>`;
+                        }
+
+                        statsContainer.innerHTML = statsHtml;
+                    }
+
+                    console.log(`✅ Gráfico de correlación Precip-Caudal cargado para: ${estacion}`);
+                })
+                .catch(error => {
+                    console.error(`Error loading correlación Precip-Caudal ${estacion}:`, error);
+                    const statsContainer = document.getElementById(statsContainerId);
+                    if (statsContainer) {
+                         statsContainer.innerHTML = `<p style="color: #ff6b6b;">Error: ${error.message}</p>`;
+                    }
+                    window[canvasId] = null;
+                });
+        }
+
+        // Funciones específicas para cada estación
+        function loadCorrelacionPrecipCaudalPapallactaChart() {
+            loadCorrelacionPrecipCaudalChart('papallacta', 'correlacionPrecipCaudalPapallactaChart', 'stats-correlacion-precip-caudal-papallacta');
+        }
+
+        function loadCorrelacionPrecipCaudalQuijosChart() {
+            loadCorrelacionPrecipCaudalChart('quijos', 'correlacionPrecipCaudalQuijosChart', 'stats-correlacion-precip-caudal-quijos');
+        }
+
+        // Función para cargar ambos gráficos de correlación Precip-Caudal
+        function loadAllCorrelacionPrecipCaudalCharts() {
+            loadCorrelacionPrecipCaudalPapallactaChart();
+            loadCorrelacionPrecipCaudalQuijosChart();
+        }
+
+        // === Fin de Funciones para cargar gráficos de correlación Precipitación-Caudal ===
+          // === Variables globales para la contribución de afluentes ===
+        let contribucionAfluentesChart = null;
+        // === Fin de Variables globales ===
+
+        // === Funciones para cargar y mostrar la contribución de afluentes ===
+
+        function loadContribucionAfluentes() {
+            console.log("Cargando datos de contribución de afluentes...");
+            fetch('/api/contribucion_afluentes')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Error del servidor (${response.status}) al cargar datos de contribución.`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    if (!data.success) {
+                         throw new Error(`Respuesta inesperada del servidor.`);
+                    }
+
+                    // --- 1. Actualizar el gráfico de barras ---
+                    const ctx = document.getElementById('contribucionAfluentesChart').getContext('2d');
+
+                    // Destruir gráfico existente si hay uno
+                    if (contribucionAfluentesChart) {
+                        contribucionAfluentesChart.destroy();
+                    }
+
+                    // Crear el nuevo gráfico de barras usando los datos de chartjs_data_barras
+                    contribucionAfluentesChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: data.chartjs_data_barras, // Usamos los datos preformateados
+                        options: {
+                            indexAxis: 'x', // Barras verticales
+                            responsive: true,
+                            maintainAspectRatio: false,
+                             plugins: {
+                                title: {
+                                    display: true,
+                                    text: `Contribución Promedio al Mínimo de 127 m³/s`
+                                },
+                                legend: {
+                                    display: false // La leyenda está implícita en las etiquetas
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            return `${context.dataset.label}: ${context.parsed.y.toFixed(1)}%`;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: 100, // Porcentaje máximo
+                                    title: {
+                                        display: true,
+                                        text: 'Porcentaje (%)'
+                                    },
+                                    ticks: {
+                                        callback: function(value) {
+                                            return value + '%';
+                                        }
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Fuente'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    // Almacenar la instancia en una variable global
+                    window.contribucionAfluentesChart = contribucionAfluentesChart;
+
+                    // --- 2. Actualizar el texto del resumen ---
+                    const statsContainer = document.getElementById('contribucion-stats-text');
+                    if (statsContainer) {
+                        let statsHtml = `<h4>Resumen del Análisis</h4>`;
+                        statsHtml += `<p><strong>Caudal Mínimo Ecológico:</strong> <span class="stat-highlight">${data.caudal_minimo_ecologico} m³/s</span></p>`;
+                        statsHtml += `<p><strong>Caudal Promedio Total de Afluentes:</strong> <span class="stat-highlight">${data.caudal_total_afluentes_promedio} m³/s</span></p>`;
+                        statsHtml += `<p><strong>Porcentaje del Mínimo Cubierto:</strong> <span class="stat-highlight">${data.porcentaje_total_del_minimo}%</span></p>`;
+
+                        statsHtml += `<div class="clasificacion">${data.clasificacion_importancia}</div>`;
+                        statsHtml += `<p><strong>Descripción:</strong> ${data.descripcion_importancia}</p>`;
+
+                        statsHtml += `<p><strong>Conclusión:</strong> ${data.conclusion_principal}</p>`;
+
+                        statsHtml += `<h4>Detalles</h4>`;
+                        statsHtml += `<p><strong>Papallacta:</strong> ${data.caudal_promedio_papallacta} m³/s (<span class="stat-highlight">${data.porcentaje_papallacta_del_minimo}%</span> del mínimo)</p>`;
+                        statsHtml += `<p><strong>Quijos:</strong> ${data.caudal_promedio_quijos} m³/s (<span class="stat-highlight">${data.porcentaje_quijos_del_minimo}%</span> del mínimo)</p>`;
+                        statsHtml += `<p><strong>Registros Analizados:</strong> ${data.registros_analizados}</p>`;
+                        statsHtml += `<p><strong>Veces por Debajo del Mínimo:</strong> ${data.registros_por_debajo_del_minimo} (${data.porcentaje_del_tiempo_por_debajo}%)</p>`;
+                        statsHtml += `<p><strong>Confiabilidad de los Datos:</strong> ${(data.confiabilidad_datos * 100).toFixed(0)}%</p>`;
+
+                        statsContainer.innerHTML = statsHtml;
+                    }
+
+                    console.log("✅ Datos de contribución de afluentes cargados y mostrados.");
+                })
+                .catch(error => {
+                    console.error('Error loading contribución de afluentes:', error);
+                    const statsContainer = document.getElementById('contribucion-stats-text');
+                    const chartContainer = document.getElementById('contribucionAfluentesChart')?.parentElement;
+
+                    if (statsContainer) {
+                         statsContainer.innerHTML = `<p style="color: #ff6b6b; text-align: center;">Error: ${error.message}</p>`;
+                    }
+                    if (chartContainer) {
+                        chartContainer.innerHTML = `<p style="color: #ff6b6b; text-align: center; padding: 2rem;">Error al cargar el gráfico: ${error.message}</p>`;
+                    }
+                    window.contribucionAfluentesChart = null;
+                });
+        }
+
+        // === Fin de Funciones para cargar y mostrar la contribución de afluentes ===
