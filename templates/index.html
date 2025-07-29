@@ -14,7 +14,7 @@
     <header class="header">
         <nav class="nav">
             <div class="logo">
-                <span class="logo-icon">🏔️</span>
+                <span class="logo-icon">🏞️</span>
                 Antisana
             </div>
             <ul class="nav-links">
@@ -99,7 +99,7 @@ Hidroeléctrica Coca Codo Sinclair desde el volcán Antisana, incluyendo los rí
                         <div class="info-card-icon">🌧️</div>
                         <h3>Sensores Pluviómetros</h3>
                     </div>
-                    <p>Red de 6 estaciones pluviométricas de alta precisión (P42, P43, P55, P34, P63, M5023) que miden precipitación con resolución de 0.1mm. Estos sensores proporcionan datos críticos para entender los patrones de lluvia en el páramo andino.</p>
+                    <p>Red de estaciones pluviométricas de alta precisión (P34, P38, P42, P46, P55, P57, P34, M5023) que miden precipitación con resolución de 0.1mm. Estos sensores proporcionan datos críticos para entender los patrones de lluvia en el páramo andino.</p>
                 </div>
                 
                 <div class="info-card">
@@ -107,7 +107,7 @@ Hidroeléctrica Coca Codo Sinclair desde el volcán Antisana, incluyendo los rí
                         <div class="info-card-icon">🌊</div>
                         <h3>Sensores Hidrométricos</h3>
                     </div>
-                    <p>Estaciones hidrométricas (H44, H55) que monitorean caudal y nivel de agua  usando tecnología ultrasónica y de presión. Miden las variaciones hídricas de los afluentes del sistema Antisana-Coca.</p>
+                    <p>Estaciones hidrométricas (H31, H32, H33, H34, H36, H45, H46) que monitorean caudal y nivel de agua  usando tecnología ultrasónica y de presión. Miden las variaciones hídricas de los afluentes del sistema Antisana-Coca.</p>
                 </div>
                 
                 <div class="info-card">
@@ -290,36 +290,40 @@ Hidroeléctrica Coca Codo Sinclair desde el volcán Antisana, incluyendo los rí
                     <div class="feature-icon">🌧️</div>
                     <h3 class="feature-title">Pluviómetros de Precisión</h3>
                     <p class="feature-description">Sensores de alta precisión que miden la precipitación en tiempo real con resolución de 0.1mm, diseñados para operar en las condiciones extremas del páramo andino a más de 4,000 metros de altitud.</p>
+                    <!-- Botón para abrir el modal -->
+                    <button class="btn-ver-detalles" data-modal-target="modal-pluvio">Ver Modelos y Costos</button>
                 </div>
                 
                 <div class="feature-card">
                     <div class="feature-icon">🌊</div>
                     <h3 class="feature-title">Hidrómetros Ultrasónicos</h3>
                     <p class="feature-description">Medición continua de caudal y nivel mediante tecnología ultrasónica sin contacto, proporcionando datos precisos de los ríos Quijos y Papallacta con actualizaciones cada 15 minutos.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">📡</div>
-                    <h3 class="feature-title">Transmisión Satelital</h3>
-                    <p class="feature-description">Sistema de telemetría robusto que utiliza comunicación satelital y GSM para transmitir datos desde ubicaciones remotas, garantizando conectividad constante con el centro de control.</p>
+                    <!-- Botón para abrir el modal -->
+                    <button class="btn-ver-detalles" data-modal-target="modal-hidro">Ver Modelos y Costos</button>
                 </div>
                 
                 <div class="feature-card">
                     <div class="feature-icon">🔋</div>
                     <h3 class="feature-title">Energía Solar Autónoma</h3>
                     <p class="feature-description">Paneles solares de alta eficiencia y baterías de ion-litio proporcionan energía continua a las estaciones remotas, asegurando operación 24/7 sin mantenimiento frecuente.</p>
+                     <!-- Botón para abrir el modal -->
+                    <button class="btn-ver-detalles" data-modal-target="modal-solar">Ver Modelos y Costos</button>
                 </div>
                 
                 <div class="feature-card">
                     <div class="feature-icon">🛡️</div>
                     <h3 class="feature-title">Resistencia Climática Extrema</h3>
                     <p class="feature-description">Equipos certificados IP68 diseñados para soportar temperaturas de -20°C a +60°C, vientos de hasta 200 km/h y las condiciones adversas del páramo ecuatoriano.</p>
+                 <!-- Botón para abrir el modal -->
+                    <button class="btn-ver-detalles" data-modal-target="modal-clima">Ver Modelos y Costos</button>
                 </div>
                 
                 <div class="feature-card">
                     <div class="feature-icon">🤖</div>
                     <h3 class="feature-title">IA y Análisis Predictivo</h3>
                     <p class="feature-description">Algoritmos de inteligencia artificial analizan patrones históricos y actuales para generar pronósticos hidrológicos, alertas tempranas y optimización de la gestión del recurso hídrico.</p>
+                     <!-- Botón para abrir el modal -->
+                    <button class="btn-ver-detalles" data-modal-target="modal-ia">Ver Modelos y Costos</button>
                 </div>
             </div>
         </div>
@@ -380,7 +384,231 @@ Hidroeléctrica Coca Codo Sinclair desde el volcán Antisana, incluyendo los rí
             </div>
         </div>
     </div>
+    <!-- === MODALES PARA CARACTERÍSTICAS === -->
 
+    <!-- Modal Pluviómetros -->
+    <div id="modal-pluvio" class="modal-overlay-feature" style="display: none;">
+        <div class="modal-content-feature">
+            <div class="modal-header">
+                <h5 class="modal-title">Pluviómetros de Precisión - Modelos y Costos</h5>
+                <button type="button" class="modal-close-btn-feature" data-modal-id="modal-pluvio">&times;</button>
+            </div>
+            <div class="modal-body">
+                <table class="feature-table">
+                    <thead>
+                        <tr>
+                            <th>Modelo</th>
+                            <th>Precio aprox.</th>
+                            <th>Descripción</th>
+                            <th>Link</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Onset HOBO RG3-M</td>
+                            <td>$771</td>
+                            <td>El medidor de lluvia de registro de datos es un sistema de recolección y registro de datos de lluvia que funciona con baterías que incluye un registrador de datos de eventos colgantes HOBO ® integrado en un pluviómetro de cubeta basculante.</td>
+                            <td><a href="https://hydrocultura.com/products/hobo-rg3-m-pluviometro-registrador-de-datos-version-metrica?srsltid=AfmBOorkLnktNrAyqAfnvvWuV6xhvN6gJXdwJGEL0auXSuNqlSVBTnbl" target="_blank" rel="noopener noreferrer">Ver detalle</a></td>
+                        </tr>
+                        <tr>
+                            <td>Texas Instruments TR-525I</td>
+                            <td>$ 537.45</td>
+                            <td>El pluviómetro de cubeta basculante TR-525I de Texas Electronics, Inc., con embudo de 15 cm de diámetro, es un pluviómetro remoto de cubeta basculante que mide la precipitación líquida. A medida que se recoge el agua, la cubeta basculante se llena hasta el punto de volcarse, lo que provoca el cierre momentáneo de un interruptor para medir gradualmente la acumulación de lluvia. Esta acción vacía la cubeta para prepararla para mediciones adicionales. El agua descargada por la cubeta basculante sale del pluviómetro sin necesidad de vaciarla. El TR-525I es un pluviómetro robusto y fiable, apto para investigación, que ofrece alta precisión a bajo costo.</td>
+                            <td><a href="https://texaselectronics.com/product/tr-525i-tipping-bucket-rain-gauge-6-inch-collector/" target="_blank" rel="noopener noreferrer">Ver detalle</a></td>
+                        </tr>
+                        <tr>
+                            <td>OTT Pluvio² L</td>
+                            <td>$4,000.00</td>
+                            <td>El OTT Pluvio² L es un pluviómetro para todo tipo de clima que utiliza tecnología superior basada en el peso para medir la cantidad e intensidad de lluvia, nieve y granizo. Desarrollado en colaboración con servicios meteorológicos líderes del sector, el OTT Pluvio² L emplea una celda de carga de alta precisión y algoritmos que compensan el viento, la temperatura y la evaporación, garantizando mediciones de precipitación con la máxima precisión a lo largo del tiempo.</td>
+                            <td><a href="https://overstock.hoskinscientific.com/products/ott-pluvio-lrh-withheatingdevice-collection-area200cmsquare1500mm-7004000190?utm_source=chatgpt.com" target="_blank" rel="noopener noreferrer">Ver detalle</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary-feature" data-modal-id="modal-pluvio">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Hidrómetros -->
+    <div id="modal-hidro" class="modal-overlay-feature" style="display: none;">
+        <div class="modal-content-feature">
+            <div class="modal-header">
+                <h5 class="modal-title">Hidrómetros Ultrasónicos - Modelos y Costos</h5>
+                <button type="button" class="modal-close-btn-feature" data-modal-id="modal-hidro">&times;</button>
+            </div>
+            <div class="modal-body">
+                <table class="feature-table">
+                    <thead>
+                        <tr>
+                            <th>Modelo</th>
+                            <th>Precio aprox.</th>
+                            <th>Descripción</th>
+                            <th>Link</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>MaxBotix MB7389</td>
+                            <td>$179.65</td>
+                            <td>Resolución de 1 mm. Velocidad de lectura de 6,66 Hz. Compensación de temperatura interna. El sensor ultrasónico de 42 kHz mide la distancia a los objetos. Cumple con RoHS. Leer desde las 3 salidas del sensor: voltaje analógico, serie, ancho de pulso. Prácticamente no hay zona muerta del sensor, los objetos que se encuentran a menos de 30 cm suelen tener un alcance de 30 cm. Funciona entre 2,7 y 5,5 V. Requerimiento de corriente promedio bajo de 2,9 mA. Módulo pequeño y ligero. Diseñado para una fácil integración en su proyecto o producto. Temperatura de funcionamiento: -40 °C a +65 °C (-40 °F a +149 °F). Calibración automática en tiempo real (voltaje, humedad y ruido ambiental). Filtrado de firmware para una excelente tolerancia al ruido y rechazo del ruido.</td>
+                            <td><a href="https://maxbotix.com/products/mb7389?variant=48771213820191&srsltid=AfmBOopyHPGFRx9bH4APnnw8OFmL4BiykPKtCyJnvydWtK7IpKGLjHCv" target="_blank" rel="noopener noreferrer">Ver detalle</a></td>
+                        </tr>
+                        <tr>
+                            <td>Vegapuls C21</td>
+                            <td>$1,197.00</td>
+                            <td>El VEGAPULS C 21 es el sensor ideal para la medición de nivel sin contacto en aplicaciones sencillas que requieren un alto grado de protección. Es especialmente adecuado para su uso en el tratamiento de aguas, estaciones de bombeo y depósitos de aliviadero, así como para la medición de caudal en canales abiertos y la monitorización de nivel. En el caso de sólidos a granel, los sensores se utilizan en pequeños silos o contenedores abiertos.</td>
+                            <td><a href="https://www.vega.com/en-us/products/product-catalog/level/radar/vegapuls-c-21" target="_blank" rel="noopener noreferrer">Ver detalle</a></td>
+                        </tr>
+                        <!-- Puedes añadir más filas aquí -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary-feature" data-modal-id="modal-hidro">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Energía Solar -->
+    <div id="modal-solar" class="modal-overlay-feature" style="display: none;">
+        <div class="modal-content-feature">
+            <div class="modal-header">
+                <h5 class="modal-title">Energía Solar Autónoma - Modelos y Costos</h5>
+                <button type="button" class="modal-close-btn-feature" data-modal-id="modal-solar">&times;</button>
+            </div>
+            <div class="modal-body">
+                <table class="feature-table">
+                    <thead>
+                        <tr>
+                            <th>Modelo</th>
+                            <th>Precio aprox.</th>
+                            <th>Descripción</th>
+                            <th>Link</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Panel solar portátil de 400 W</td>
+                            <td>$398</td>
+                            <td>Panel solar de alta eficiencia del 23,5 %: el panel solar MHPOWOS de 400 W utiliza células solares monocristalinas A+, con una tasa de conversión excepcional del 23,5 %. Los paneles solares portátiles de 400 W pueden cargar su generador solar o central eléctrica de forma más rápida y eficiente que nunca.</td>
+                            <td><a href="https://www.amazon.com/MHPOWOS-Lightweight-Adjustable-Kickstand-Waterproof/dp/B0DHRYW4TM/ref=sr_1_2_sspa?..." target="_blank" rel="noopener noreferrer">Ver detalle</a></td>
+                        </tr>
+                        <tr>
+                            <td>EcoFlow River 2</td>
+                            <td>$314</td>
+                            <td>Estación de energía portátil EF ECOFLOW RIVER 2 con panel solar de 45 W, batería LiFePO4 de 256 Wh/carga rápida en 1 hora, salida de hasta 600 W.</td>
+                            <td><a href="https://www.amazon.com/-/es/Estaci%C3%B3n-port%C3%A1til-corriente-generador-campamento/dp/B0B8MXPRDB?th=1" target="_blank" rel="noopener noreferrer">Ver detalle</a></td>
+                        </tr>
+                        <!-- Puedes añadir más filas aquí -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary-feature" data-modal-id="modal-solar">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Resistencia Climática -->
+    <div id="modal-clima" class="modal-overlay-feature" style="display: none;">
+        <div class="modal-content-feature">
+            <div class="modal-header">
+                <h5 class="modal-title">Resistencia Climática Extrema - Modelos y Costos</h5>
+                <button type="button" class="modal-close-btn-feature" data-modal-id="modal-clima">&times;</button>
+            </div>
+            <div class="modal-body">
+                <table class="feature-table">
+                    <thead>
+                        <tr>
+                            <th>Modelo</th>
+                            <th>Precio aprox.</th>
+                            <th>Descripción</th>
+                            <th>Link</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Caja IP67 estanca</td>
+                            <td>$18</td>
+                            <td>Caja de conexiones; Clasificación de resistencia al agua: IP67; Diseño resistente al agua y a la intemperie, bloquea eficazmente salpicaduras de agua, lluvia, polvo, nieve, aceite, etc. Material: Plástico ABS; Peso neto: 440 g; Color principal: Gris. Dimensiones exteriores: 200 x 150 x 100 mm (largo x ancho x alto); Dimensiones interiores (aprox.): 190 x 140 x 94 mm (largo x ancho x alto); Diámetro de la rosca: 10 mm. Hecho de material ABS de alta calidad que ofrece una excelente resistencia al impacto y aislamiento eléctrico, a prueba de humedad, protector solar, anticorrosión, sólido para años de uso. Puede mantener su equipo bien protegido en entornos hostiles.</td>
+                            <td><a href="https://www.amazon.com/-/es/conexiones-impermeable-pl%C3%A1stico-proyecto-el%C3%A9ctrico/dp/B09727F4LC" target="_blank" rel="noopener noreferrer">Ver detalle</a></td>
+                        </tr>
+                        <tr>
+                            <td>electronics enclosure box</td>
+                            <td>$18</td>
+                            <td>Nuestra caja de plástico ABS ofrece una protección excepcional para sus conexiones eléctricas, tanto en interiores como en exteriores. Diseñada para ser impermeable, resistente a la intemperie y al polvo, con clasificación IP67, garantiza la seguridad y la durabilidad de sus conexiones eléctricas.</td>
+                            <td><a href="https://www.amazon.com/XINYIELE-Waterproof-Weatherproof-Dustproof-Enclosure/dp/B0C5TKG1TX/ref=sr_1_1_sspa?..." target="_blank" rel="noopener noreferrer">Ver detalle</a></td>
+                        </tr>
+                        <!-- Puedes añadir más filas aquí -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary-feature" data-modal-id="modal-clima">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal IA -->
+    <div id="modal-ia" class="modal-overlay-feature" style="display: none;">
+        <div class="modal-content-feature">
+            <div class="modal-header">
+                <h5 class="modal-title">IA y Análisis Predictivo - Opciones</h5>
+                <button type="button" class="modal-close-btn-feature" data-modal-id="modal-ia">&times;</button>
+            </div>
+            <div class="modal-body">
+                <table class="feature-table">
+                    <thead>
+                        <tr>
+                            <th>Opción</th>
+                            <th>Precio aprox.</th>
+                            <th>Tecnología</th>
+                            <th>Características</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Google Colab + Python</td>
+                            <td>$0</td>
+                            <td>IA en la nube</td>
+                            <td>Gratis con notebooks.</td>
+                        </tr>
+                        <tr>
+                            <td>Raspberry Pi 4 + Python</td>
+                            <td>$100</td>
+                            <td>Edge AI</td>
+                            <td>IA básica local.</td>
+                        </tr>
+                        <tr>
+                            <td>Jetson Nano (NVIDIA)</td>
+                            <td>$180</td>
+                            <td>IA local</td>
+                            <td>Modelos más avanzados.</td>
+                        </tr>
+                        <tr>
+                            <td>AWS SageMaker Studio</td>
+                            <td>$300+/mes</td>
+                            <td>Cloud IA</td>
+                            <td>IA escalable, pago por uso.</td>
+                        </tr>
+                        <tr>
+                            <td>Microsoft Azure ML Studio</td>
+                            <td>$500+/mes</td>
+                            <td>Cloud IA</td>
+                            <td>IA empresarial.</td>
+                        </tr>
+                        <!-- Puedes añadir más filas aquí -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary-feature" data-modal-id="modal-ia">Cerrar</button>
+            </div>
+        </div>
+    </div>
+    <!-- === FIN DE MODALES PARA CARACTERÍSTICAS === -->
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="../static/js/app.js"></script>

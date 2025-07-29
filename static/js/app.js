@@ -56,6 +56,28 @@
 
             // Coordenadas del sensor
             const sensores = [
+                /*PLuviometros*/
+                 {
+                    codigo: "M5023",
+                    nombre: "Papallacta",
+                    tipo: "Pluviométrica",
+                    lat: -0.3784621293075407,
+                    lng: -78.14090447228763
+                },
+                {
+                    codigo: "P34",
+                    nombre: "Papallacta",
+                    tipo: "Pluviométrica",
+                    lat: -0.3809496476812419,
+                    lng: -78.1411372167858
+                },
+                {
+                    codigo: "P38",
+                    nombre: "San Simón",
+                    tipo: "Pluviométrica",
+                    lat: -0.522419044102492,
+                    lng: -78.15031107128566
+                },
                 {
                     codigo: "P42",
                     nombre: "Antisana Ramón Huañuna",
@@ -71,46 +93,75 @@
                     lng: -78.20825370752031
                 },
                 {
+                    codigo: "P46",
+                    nombre: "Chalpi Grande",
+                    tipo: "Pluviométrica",
+                    lat: -0.3548390775885883,
+                    lng: -78.08511572584038
+                },
+                {
                     codigo: "P55",
                     nombre: "Antisana Diguchi",
                     tipo: "Pluviométrica",
                     lat: -0.5731364867736277,
                     lng: -78.262844542214
                 },
-                {
-                    codigo: "P34",
-                    nombre: "Papallacta",
+                 {
+                    codigo: "P57",
+                    nombre: "Quijos Campamento",
                     tipo: "Pluviométrica",
-                    lat: -0.3809496476812419,
-                    lng: -78.1411372167858
+                    lat: -0.4704081846444236,
+                    lng: -78.04788250334519
                 },
+                /*Hidrometros*/
                 {
-                    codigo: "P63",
-                    nombre: "La Virgen Papallacta",
-                    tipo: "Pluviométrica",
-                    lat: -0.32058993015514037,
-                    lng: -78.19171352782969
-                },
-                {
-                    codigo: "M5023",
-                    nombre: "Papallacta",
-                    tipo: "Pluviométrica",
-                    lat: -0.3784621293075407,
-                    lng: -78.14090447228763
-                },
-                {
-                    codigo: "H44",
-                    nombre: "Antisana DJ Diguchi",
+                    codigo: "H31",
+                    nombre: "Blanco Grande",
                     tipo: "Hidrométrica",
-                    lat: -0.5683880379564397,
-                    lng: -78.2298390801277
+                    lat:  -0.38196094140616804,
+                    lng:  -78.07250711784522
                 },
                 {
-                    codigo: "H55",
-                    nombre: "Río Antisana AC",
+                    codigo: "H32",
+                    nombre: "Cojanco",
                     tipo: "Hidrométrica",
-                    lat: -0.5367672976823137,
-                    lng: -78.22695270391573
+                    lat:   -0.3843205211021901,
+                    lng:  -78.14550995059952
+                },
+                {
+                    codigo: "H33",
+                    nombre: "Quijos Norte",
+                    tipo: "Hidrométrica",
+                    lat:   -0.47692629837407785,
+                    lng:   -78.04794930200559
+                },
+                {
+                    codigo: "H34",
+                    nombre: "Papallacta",
+                    tipo: "Hidrométrica",
+                    lat:   -0.3774923958873509,
+                    lng:  -78.1437783896944
+                },
+                {
+                    codigo: "H36",
+                    nombre: "Tuminguina Ramal Papallacta",
+                    tipo: "Hidrométrica",
+                    lat:   -0.3842207347551541,
+                    lng:   -78.14559505947328
+                },
+                {
+                    codigo: "H45",
+                    nombre: "Río Papallacta DJ Río Blanco Chico",
+                    tipo: "Hidrométrica",
+                    lat: -0.37820623763246236,
+                    lng: -78.12097752351622
+                },
+                {
+                    codigo: "H46",
+                    nombre: "Papallacta DJ Blanco chico",
+                    tipo: "Hidrométrica",
+                    lat: -0.3824585178138475,
+                    lng: -78.124101222203
                 }
             ];
 
@@ -285,7 +336,7 @@ function loadStats() {
                 document.getElementById('total-registros').textContent = totalRegistros;
 
                 const totalSensores = Object.values(data.sensores_activos).reduce((a, b) => a + b, 0);
-                document.getElementById('sensores-activos').textContent = totalSensores;
+                document.getElementById('sensores-activos').textContent = totalSensores+1;
             }
         })
         .catch(error => console.error('Error loading stats:', error));
@@ -299,7 +350,6 @@ function loadCharts() {
     loadCaudalPapallactaChart();
     loadNivelQuijosChart();
     loadNivelPapallactaChart();
-    loadSummaryChart();
 }
 
 // Load precipitación chart
@@ -842,9 +892,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- 1. Configurar el Modal Personalizado ---
     setupModalCloseHandlers(); // <-- ESTA ES LA LÍNEA QUE FALTABA
-     setupModalGraficoGrandeHandlers(); // Configura cómo se cierra el modal de gráfico grande
-        setupBotonesVerGrande(); // Configura los botones para abrir el modal
-        setupBotonAnalizarIAModal(); // Configura el botón de análisis del modal de gráfico grande
+    setupModalGraficoGrandeHandlers(); // Configura cómo se cierra el modal de gráfico grande
+    setupBotonesVerGrande(); // Configura los botones para abrir el modal
+    setupBotonAnalizarIAModal(); // Configura el botón de análisis del modal de gráfico grande
+    setupFeatureModals(); // Configura los modales de características
     console.log("Manejadores del modal personalizado configurados.");
 
     // --- 2. Configurar botones de análisis (asegurarse de usar la clase correcta) ---
@@ -1277,3 +1328,66 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // --- Fin de Funciones para el Modal de Gráfico Grande ---
+        // === Funciones para Modales de Características ===
+
+        // Función para mostrar/ocultar modales de características
+        function toggleFeatureModal(modalId, show = true) {
+            const modal = document.getElementById(modalId);
+            if (show) {
+                modal.classList.add('active');
+                modal.style.display = 'flex';
+            } else {
+                modal.classList.remove('active');
+                setTimeout(() => {
+                    if (!modal.classList.contains('active')) {
+                        modal.style.display = 'none';
+                    }
+                }, 300); // Coincide con la duración de la transición CSS
+            }
+        }
+
+        // Función para configurar los event listeners de los botones de detalles y cierre
+        function setupFeatureModals() {
+            // Abrir modal desde botones "Ver Detalles"
+            // Selecciona los botones por su clase
+            document.querySelectorAll('.btn-ver-detalles').forEach(button => {
+                button.addEventListener('click', function() {
+                    const modalTargetId = this.getAttribute('data-modal-target');
+                    if (modalTargetId) {
+                        toggleFeatureModal(modalTargetId, true);
+                    }
+                });
+            });
+
+            // Cerrar modal desde botones de cierre (X)
+            document.querySelectorAll('.modal-close-btn-feature').forEach(button => {
+                button.addEventListener('click', function() {
+                    const modalId = this.getAttribute('data-modal-id');
+                    if (modalId) {
+                        toggleFeatureModal(modalId, false);
+                    }
+                });
+            });
+
+            // Cerrar modal desde botones "Cerrar" del footer
+            document.querySelectorAll('.btn-secondary-feature').forEach(button => {
+                button.addEventListener('click', function() {
+                    const modalId = this.getAttribute('data-modal-id');
+                    if (modalId) {
+                        toggleFeatureModal(modalId, false);
+                    }
+                });
+            });
+
+            // Cerrar modal al hacer clic fuera del contenido del modal
+            document.querySelectorAll('.modal-overlay-feature').forEach(modalOverlay => {
+                modalOverlay.addEventListener('click', function(e) {
+                    if (e.target === modalOverlay) {
+                        const modalId = this.id;
+                        toggleFeatureModal(modalId, false);
+                    }
+                });
+            });
+        }
+
+        // === Fin de Funciones para Modales de Características ===

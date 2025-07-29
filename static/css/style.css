@@ -616,6 +616,7 @@
             background: linear-gradient(135deg, rgba(100, 200, 255, 0.08), rgba(74, 144, 226, 0.08));
             opacity: 0;
             transition: opacity 0.4s ease;
+             z-index: -1;
         }
 /*========================== Efecto de gradiente brillante featuresCards================================= */
         .feature-card:hover::before {
@@ -1203,3 +1204,182 @@
 }
 
 /* --- Fin de Asegurar orden de apilamiento de modales --- */
+      /* === Estilos para Modales de Características y Tablas === */
+
+    /* Overlay para los modales de características */
+    .modal-overlay-feature {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1045; /* Asegúrate de que esté por debajo del chatbot (1050) */
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .modal-overlay-feature.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* Contenido del modal de características */
+    .modal-content-feature {
+        background: #1e2a38;
+        color: white;
+        border-radius: 15px;
+        width: 95%;
+        max-width: 1000px; /* Ancho máximo para tablas */
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        transform: translateY(20px);
+        transition: transform 0.4s ease;
+    }
+
+    .modal-overlay-feature.active .modal-content-feature {
+        transform: translateY(0);
+    }
+
+    /* Cabecera del modal de características */
+    .modal-header {
+        padding: 1rem 1.5rem;
+        background: linear-gradient(135deg, #4a90e2, #64c8ff);
+        color: white;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* Botón de cierre del modal de características */
+    .modal-close-btn-feature {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.8rem;
+        cursor: pointer;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: background-color 0.2s ease;
+    }
+
+    .modal-close-btn-feature:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Cuerpo del modal de características */
+    .modal-body {
+        padding: 1.5rem;
+        overflow-y: auto;
+        flex-grow: 1;
+    }
+
+    /* Tabla dentro del modal */
+    .feature-table {
+        width: 100%;
+        border-collapse: collapse;
+        color: white;
+        font-size: 0.85rem; /* Ajuste de tamaño de fuente */
+    }
+
+    .feature-table th,
+    .feature-table td {
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 0.5rem; /* Reducción de padding */
+        text-align: left;
+        vertical-align: top; /* Alinear texto arriba si se envuelve */
+    }
+
+    .feature-table thead th {
+        background-color: rgba(100, 200, 255, 0.15);
+        font-weight: bold;
+    }
+
+    .feature-table tbody tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .feature-table a {
+        color: #64c8ff;
+        text-decoration: underline;
+    }
+
+    .feature-table a:hover {
+        color: #4da3d9;
+    }
+
+    /* Pie del modal de características */
+    .modal-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        justify-content: flex-end;
+        background-color: rgba(255, 255, 255, 0.03);
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+    }
+
+    /* Botón secundario para el modal de características */
+    .btn-secondary-feature {
+        background-color: #6c757d;
+        border: 1px solid #6c757d;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 0.375rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease, border-color 0.2s ease;
+        font-size: 0.9rem; /* Ajuste de tamaño de fuente */
+    }
+
+    .btn-secondary-feature:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+    }
+
+    /* Botón "Ver Detalles" en las tarjetas */
+    .btn-ver-detalles {
+        /* Estilos básicos del botón */
+        display: inline-block;
+        margin-top: 1rem;
+        padding: 0.4rem 0.8rem; /* Ajuste de padding */
+        font-size: 0.85rem; /* Ajuste de tamaño de fuente */
+        font-weight: 500;
+        line-height: 1.5;
+        text-align: center;
+        text-decoration: none;
+        vertical-align: middle;
+        cursor: pointer;
+        user-select: none;
+        border: 1px solid transparent;
+        border-radius: 0.375rem;
+        transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        background-color: rgba(100, 200, 255, 0.1);
+        color: #64c8ff;
+        border-color: rgba(100, 200, 255, 0.3);
+        width: auto; /* No ocupar 100% del ancho */
+    }
+
+    .btn-ver-detalles:hover {
+        background-color: rgba(100, 200, 255, 0.2);
+        border-color: rgba(100, 200, 255, 0.5);
+    }
+
+    .btn-ver-detalles:focus {
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(100, 200, 255, 0.25);
+    }
+
+    /* === Fin de Estilos para Modales de Características y Tablas === */
